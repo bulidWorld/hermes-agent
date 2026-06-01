@@ -2495,6 +2495,54 @@ class TestExcludeSources:
         assert sources == ["cli"]
 
 
+class TestUserIDFilter:
+    """Tests for user_id filter on list_sessions_rich."""
+
+    def test_filter_by_user_id_returns_only_that_user(self, db):
+        db.create_session("s1", "api_server", user_id="alice")
+        db.create_session("s2", "api_server", user_id="bob")
+        db.create_session("s3", "api_server", user_id="alice")
+        sessions = db.list_sessions_rich(user_id="alice")
+        ids = [s["id"] for s in sessions]
+        assert sorted(ids) == ["s1", "s3"]
+
+    def test_no_user_id_returns_all_sessions(self, db):
+        db.create_session("s1", "api_server", user_id="alice")
+        db.create_session("s2", "api_server", user_id="bob")
+        sessions = db.list_sessions_rich()
+        ids = [s["id"] for s in sessions]
+        assert sorted(ids) == ["s1", "s2"]
+
+    def test_user_id_combined_with_source(self, db):
+        db.create_session("s1", "api_server", user_id="alice")
+        db.create_session("s2", "cli", user_id="alice")
+        db.create_session("s3", "api_server", user_id="bob")
+        sessions = db.list_sessions_rich(user_id="alice", source="api_server")
+        ids = [s["id"] for s in sessions]
+        assert ids == ["s1"]
+
+    def test_user_id_no_matches_returns_empty(self, db):
+        db.create_session("s1", "api_server", user_id="alice")
+        sessions = db.list_sessions_rich(user_id="nobody")
+        assert sessions == []
+
+    def test_user_id_with_pagination(self, db):
+        for i in range(5):
+            db.create_session(f"s{i}", "api_server", user_id="alice")
+        sessions = db.list_sessions_rich(user_id="alice", limit=2, offset=1)
+        assert len(sessions) == 2
+
+    def test_user_id_does_not_affect_exclude_sources(self, db):
+        db.create_session("s1", "cli", user_id="alice")
+        db.create_session("s2", "tool", user_id="alice")
+        db.create_session("s3", "telegram", user_id="alice")
+        sessions = db.list_sessions_rich(user_id="alice", exclude_sources=["tool"])
+        ids = [s["id"] for s in sessions]
+        assert "s1" in ids
+        assert "s3" in ids
+        assert "s2" not in ids
+
+
 class TestResolveSessionByNameOrId:
     """Tests for the main.py helper that resolves names or IDs."""
 

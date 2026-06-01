@@ -1751,6 +1751,7 @@ def _apply_env_overrides(config: GatewayConfig) -> None:
                     "QQ_HOME_CHANNEL is deprecated; rename to QQBOT_HOME_CHANNEL "
                     "in your .env for consistency with the platform key."
                 )
+                
         if qq_home:
             config.platforms[Platform.QQBOT].home_channel = HomeChannel(
                 platform=Platform.QQBOT,

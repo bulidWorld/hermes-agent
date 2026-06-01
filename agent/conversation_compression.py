@@ -347,6 +347,7 @@ def compress_context(
                 model=agent.model,
                 model_config=agent._session_init_model_config,
                 parent_session_id=old_session_id,
+                user_id=getattr(agent, '_user_id', None),
             )
             agent._session_db_created = True
             # Auto-number the title for the continuation session

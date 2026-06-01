@@ -384,6 +384,8 @@ def _create_app(adapter: APIServerAdapter) -> web.Application:
     app.router.add_post("/v1/responses", adapter._handle_responses)
     app.router.add_get("/v1/responses/{response_id}", adapter._handle_get_response)
     app.router.add_delete("/v1/responses/{response_id}", adapter._handle_delete_response)
+    app.router.add_get("/v1/sessions", adapter._handle_list_sessions)
+    app.router.add_get("/v1/sessions/{session_id}/messages", adapter._handle_get_session_messages)
     return app
 
 
@@ -3311,3 +3313,154 @@ class TestSessionKeyHeader:
             assert resp.status == 200
             data = await resp.json()
             assert data["features"]["session_key_header"] == "X-Hermes-Session-Key"
+
+
+class TestListSessionsEndpoint:
+    """Tests for GET /v1/sessions."""
+
+    @pytest.mark.asyncio
+    async def test_requires_auth_when_key_configured(self, auth_adapter):
+        """Without Authorization header, return 401 when API key is set."""
+        app = _create_app(auth_adapter)
+        async with TestClient(TestServer(app)) as cli:
+            resp = await cli.get("/v1/sessions?user_id=alice")
+            assert resp.status == 401
+
+    @pytest.mark.asyncio
+    async def test_missing_user_id_returns_400(self, adapter):
+        """user_id query parameter is required."""
+        app = _create_app(adapter)
+        async with TestClient(TestServer(app)) as cli:
+            resp = await cli.get("/v1/sessions")
+            assert resp.status == 400
+            data = await resp.json()
+            assert "user_id" in data["error"]["message"].lower()
+
+    @pytest.mark.asyncio
+    async def test_invalid_limit_returns_400(self, adapter):
+        app = _create_app(adapter)
+        async with TestClient(TestServer(app)) as cli:
+            resp = await cli.get("/v1/sessions?user_id=alice&limit=abc")
+            assert resp.status == 400
+
+    @pytest.mark.asyncio
+    async def test_invalid_offset_returns_400(self, adapter):
+        app = _create_app(adapter)
+        async with TestClient(TestServer(app)) as cli:
+            resp = await cli.get("/v1/sessions?user_id=alice&offset=-5")
+            # Negative offset coerced to 0 is fine, but non-integer should fail
+            resp2 = await cli.get("/v1/sessions?user_id=alice&offset=xyz")
+            assert resp2.status == 400
+
+    @pytest.mark.asyncio
+    async def test_returns_session_list_for_user(self, adapter):
+        mock_db = MagicMock()
+        mock_db.list_sessions_rich.return_value = [
+            {"id": "s1", "source": "api_server", "user_id": "alice", "preview": "hello"},
+            {"id": "s2", "source": "api_server", "user_id": "alice", "preview": "world"},
+        ]
+        adapter._session_db = mock_db
+        app = _create_app(adapter)
+        async with TestClient(TestServer(app)) as cli:
+            resp = await cli.get("/v1/sessions?user_id=alice")
+            assert resp.status == 200
+            data = await resp.json()
+            assert data["object"] == "list"
+            assert len(data["data"]) == 2
+            assert data["data"][0]["id"] == "s1"
+
+    @pytest.mark.asyncio
+    async def test_passes_pagination_params_to_db(self, adapter):
+        mock_db = MagicMock()
+        mock_db.list_sessions_rich.return_value = []
+        adapter._session_db = mock_db
+        app = _create_app(adapter)
+        async with TestClient(TestServer(app)) as cli:
+            await cli.get("/v1/sessions?user_id=alice&limit=10&offset=5")
+            mock_db.list_sessions_rich.assert_called_once_with(
+                user_id="alice", limit=10, offset=5,
+            )
+
+    @pytest.mark.asyncio
+    async def test_empty_list_for_unknown_user(self, adapter):
+        mock_db = MagicMock()
+        mock_db.list_sessions_rich.return_value = []
+        adapter._session_db = mock_db
+        app = _create_app(adapter)
+        async with TestClient(TestServer(app)) as cli:
+            resp = await cli.get("/v1/sessions?user_id=nobody")
+            assert resp.status == 200
+            data = await resp.json()
+            assert data["object"] == "list"
+            assert data["data"] == []
+
+    @pytest.mark.asyncio
+    async def test_capabilities_advertises_session_listing(self, adapter):
+        app = _create_app(adapter)
+        async with TestClient(TestServer(app)) as cli:
+            resp = await cli.get("/v1/capabilities")
+            assert resp.status == 200
+            data = await resp.json()
+            assert data["features"]["session_listing"] is True
+            assert "sessions" in data["endpoints"]
+
+
+class TestGetSessionMessages:
+    """Tests for GET /v1/sessions/{session_id}/messages."""
+
+    @pytest.mark.asyncio
+    async def test_requires_auth_when_key_configured(self, auth_adapter):
+        app = _create_app(auth_adapter)
+        async with TestClient(TestServer(app)) as cli:
+            resp = await cli.get("/v1/sessions/s1/messages")
+            assert resp.status == 401
+
+    @pytest.mark.asyncio
+    async def test_session_not_found_returns_404(self, adapter):
+        mock_db = MagicMock()
+        mock_db.get_session.return_value = None
+        adapter._session_db = mock_db
+        app = _create_app(adapter)
+        async with TestClient(TestServer(app)) as cli:
+            resp = await cli.get("/v1/sessions/nonexistent/messages")
+            assert resp.status == 404
+
+    @pytest.mark.asyncio
+    async def test_returns_messages_for_session(self, adapter):
+        mock_db = MagicMock()
+        mock_db.get_session.return_value = {"id": "s1", "source": "api_server"}
+        mock_db.get_messages_as_conversation.return_value = [
+            {"role": "user", "content": "hello"},
+            {"role": "assistant", "content": "hi there"},
+        ]
+        adapter._session_db = mock_db
+        app = _create_app(adapter)
+        async with TestClient(TestServer(app)) as cli:
+            resp = await cli.get("/v1/sessions/s1/messages")
+            assert resp.status == 200
+            data = await resp.json()
+            assert data["object"] == "session.messages"
+            assert data["session_id"] == "s1"
+            assert len(data["data"]) == 2
+            assert data["data"][0]["content"] == "hello"
+
+    @pytest.mark.asyncio
+    async def test_always_includes_ancestors(self, adapter):
+        mock_db = MagicMock()
+        mock_db.get_session.return_value = {"id": "s2", "source": "api_server"}
+        mock_db.get_messages_as_conversation.return_value = []
+        adapter._session_db = mock_db
+        app = _create_app(adapter)
+        async with TestClient(TestServer(app)) as cli:
+            await cli.get("/v1/sessions/s2/messages")
+            mock_db.get_messages_as_conversation.assert_called_once_with(
+                "s2", include_ancestors=True,
+            )
+
+    @pytest.mark.asyncio
+    async def test_capabilities_advertises_endpoint(self, adapter):
+        app = _create_app(adapter)
+        async with TestClient(TestServer(app)) as cli:
+            resp = await cli.get("/v1/capabilities")
+            data = await resp.json()
+            assert "session_messages" in data["endpoints"]

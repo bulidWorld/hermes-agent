@@ -353,6 +353,9 @@ class SessionDB:
             apply_wal_with_fallback(self._conn, db_label="state.db")
             self._conn.execute("PRAGMA foreign_keys=ON")
 
+            from debug_sql import maybe_wrap_connection
+            self._conn = maybe_wrap_connection(self._conn)
+
             self._init_schema()
         except Exception as exc:
             # Capture the cause so /resume and friends can surface WHY the
@@ -938,6 +941,25 @@ class SessionDB:
             row = cursor.fetchone()
         return dict(row) if row else None
 
+    def get_active_session_id_for_user(
+        self, user_id: str, source: str = None
+    ) -> Optional[str]:
+        """Return the most recent non-ended session ID for a user, or None.
+
+        Used by the API server to map ``user_id`` → ``session_id`` so that
+        stateless HTTP clients can resume their previous conversation without
+        managing ``previous_response_id`` chains.
+        """
+        if not user_id:
+            return None
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT id FROM sessions WHERE user_id = ? AND ended_at IS NULL "
+                "AND (? IS NULL OR source = ?) ORDER BY started_at DESC LIMIT 1",
+                (user_id, source, source),
+            ).fetchone()
+        return row["id"] if row else None
+
     def resolve_session_id(self, session_id_or_prefix: str) -> Optional[str]:
         """Resolve an exact or uniquely prefixed session ID to the full ID.
 
@@ -1168,6 +1190,7 @@ class SessionDB:
         include_children: bool = False,
         project_compression_tips: bool = True,
         order_by_last_active: bool = False,
+        user_id: str = None,
     ) -> List[Dict[str, Any]]:
         """List sessions with preview (first user message) and last active timestamp.
 
@@ -1220,6 +1243,10 @@ class SessionDB:
             placeholders = ",".join("?" for _ in exclude_sources)
             where_clauses.append(f"s.source NOT IN ({placeholders})")
             params.extend(exclude_sources)
+
+        if user_id:
+            where_clauses.append("s.user_id = ?")
+            params.append(user_id)
 
         where_sql = f"WHERE {' AND '.join(where_clauses)}" if where_clauses else ""
         if order_by_last_active:

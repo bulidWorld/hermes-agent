@@ -852,6 +852,7 @@ class APIServerAdapter(BasePlatformAdapter):
         self,
         ephemeral_system_prompt: Optional[str] = None,
         session_id: Optional[str] = None,
+        user_id: Optional[str] = None,
         stream_delta_callback=None,
         tool_progress_callback=None,
         tool_start_callback=None,
@@ -899,6 +900,7 @@ class APIServerAdapter(BasePlatformAdapter):
             ephemeral_system_prompt=ephemeral_system_prompt or None,
             enabled_toolsets=enabled_toolsets,
             session_id=session_id,
+            user_id=user_id,
             platform="api_server",
             stream_delta_callback=stream_delta_callback,
             tool_progress_callback=tool_progress_callback,
@@ -1005,6 +1007,7 @@ class APIServerAdapter(BasePlatformAdapter):
                 "session_continuity_header": "X-Hermes-Session-Id",
                 "session_key_header": "X-Hermes-Session-Key",
                 "cors": bool(self._cors_origins),
+                "session_listing": True,
             },
             "endpoints": {
                 "health": {"method": "GET", "path": "/health"},
@@ -1017,6 +1020,8 @@ class APIServerAdapter(BasePlatformAdapter):
                 "run_events": {"method": "GET", "path": "/v1/runs/{run_id}/events"},
                 "run_approval": {"method": "POST", "path": "/v1/runs/{run_id}/approval"},
                 "run_stop": {"method": "POST", "path": "/v1/runs/{run_id}/stop"},
+                "sessions": {"method": "GET", "path": "/v1/sessions?user_id={user_id}"},
+                "session_messages": {"method": "GET", "path": "/v1/sessions/{session_id}/messages"},
             },
         })
 
@@ -2118,6 +2123,13 @@ class APIServerAdapter(BasePlatformAdapter):
         conversation = body.get("conversation")
         store = _coerce_request_bool(body.get("store"), default=True)
 
+        # --- user_id for server-side session continuity ---
+        user_id = body.get("user_id")
+        if user_id is not None and not isinstance(user_id, str):
+            return web.json_response(_openai_error("'user_id' must be a string"), status=400)
+        if isinstance(user_id, str):
+            user_id = user_id.strip() or None
+
         # conversation and previous_response_id are mutually exclusive
         if conversation and previous_response_id:
             return web.json_response(_openai_error("Cannot use both 'conversation' and 'previous_response_id'"), status=400)
@@ -2195,6 +2207,25 @@ class APIServerAdapter(BasePlatformAdapter):
         if body.get("truncation") == "auto" and len(conversation_history) > 100:
             conversation_history = conversation_history[-100:]
 
+        # Resolve user_id → session_id and load history from session DB.
+        # Security: requires API key, matching X-Hermes-Session-Id policy.
+        if not conversation_history and user_id and self._api_key:
+            try:
+                db = self._ensure_session_db()
+                if db is not None:
+                    sid = db.get_active_session_id_for_user(user_id, source="api_server")
+                    if sid:
+                        restored = db.get_messages_as_conversation(sid)
+                        if restored:
+                            conversation_history = restored
+                            stored_session_id = sid
+                            logger.debug(
+                                "Restored %d messages from session %s for user %s",
+                                len(restored), sid, user_id,
+                            )
+            except Exception as e:
+                logger.warning("Failed to restore session for user %s: %s", user_id, e)
+
         # Reuse session from previous_response_id chain so the dashboard
         # groups the entire conversation under one session entry.
         session_id = stored_session_id or str(uuid.uuid4())
@@ -2246,6 +2277,7 @@ class APIServerAdapter(BasePlatformAdapter):
                 conversation_history=conversation_history,
                 ephemeral_system_prompt=instructions,
                 session_id=session_id,
+                user_id=user_id,
                 stream_delta_callback=_on_delta,
                 tool_progress_callback=_on_tool_progress,
                 tool_start_callback=_on_tool_start,
@@ -2284,6 +2316,7 @@ class APIServerAdapter(BasePlatformAdapter):
                 conversation_history=conversation_history,
                 ephemeral_system_prompt=instructions,
                 session_id=session_id,
+                user_id=user_id,
                 gateway_session_key=gateway_session_key,
             )
 
@@ -2401,6 +2434,114 @@ class APIServerAdapter(BasePlatformAdapter):
             "id": response_id,
             "object": "response",
             "deleted": True,
+        })
+
+    # ------------------------------------------------------------------
+    # Sessions API
+    # ------------------------------------------------------------------
+
+    async def _handle_list_sessions(self, request: "web.Request") -> "web.Response":
+        """GET /v1/sessions — list historical sessions.
+
+        Query parameters:
+        - user_id (required): filter sessions by user ID
+        - limit (optional, default 20, max 100): number of sessions to return
+        - offset (optional, default 0): pagination offset
+        """
+        auth_err = self._check_auth(request)
+        if auth_err:
+            return auth_err
+
+        user_id = request.query.get("user_id", "").strip()
+        if not user_id:
+            return web.json_response(
+                _openai_error("Query parameter 'user_id' is required", code="missing_user_id"),
+                status=400,
+            )
+
+        try:
+            raw_limit = request.query.get("limit", "20")
+            limit = max(1, min(int(raw_limit), 100))
+        except (ValueError, TypeError):
+            return web.json_response(
+                _openai_error("'limit' must be an integer", code="invalid_limit"),
+                status=400,
+            )
+
+        try:
+            raw_offset = request.query.get("offset", "0")
+            offset = max(0, int(raw_offset))
+        except (ValueError, TypeError):
+            return web.json_response(
+                _openai_error("'offset' must be an integer", code="invalid_offset"),
+                status=400,
+            )
+
+        try:
+            db = self._ensure_session_db()
+            if db is None:
+                return web.json_response(
+                    _openai_error("Session database unavailable", err_type="server_error"),
+                    status=500,
+                )
+            sessions = db.list_sessions_rich(
+                user_id=user_id,
+                limit=limit,
+                offset=offset,
+            )
+        except Exception as e:
+            logger.error("Error listing sessions for user %s: %s", user_id, e)
+            return web.json_response(
+                _openai_error(f"Internal server error: {e}", err_type="server_error"),
+                status=500,
+            )
+
+        return web.json_response({
+            "object": "list",
+            "data": sessions,
+        })
+
+    async def _handle_get_session_messages(self, request: "web.Request") -> "web.Response":
+        """GET /v1/sessions/{session_id}/messages — retrieve messages for a session.
+
+        Walks the full parent_session_id chain (include_ancestors=True) so the
+        response includes messages from all ancestor sessions in compression chains.
+        """
+        auth_err = self._check_auth(request)
+        if auth_err:
+            return auth_err
+
+        session_id = request.match_info["session_id"]
+
+        try:
+            db = self._ensure_session_db()
+            if db is None:
+                return web.json_response(
+                    _openai_error("Session database unavailable", err_type="server_error"),
+                    status=500,
+                )
+
+            session = db.get_session(session_id)
+            if session is None:
+                return web.json_response(
+                    _openai_error(f"Session not found: {session_id}", code="session_not_found"),
+                    status=404,
+                )
+
+            messages = db.get_messages_as_conversation(
+                session_id, include_ancestors=True,
+            )
+        except Exception as e:
+            logger.error("Error retrieving messages for session %s: %s", session_id, e)
+            return web.json_response(
+                _openai_error(f"Internal server error: {e}", err_type="server_error"),
+                status=500,
+            )
+
+        return web.json_response({
+            "object": "session.messages",
+            "session_id": session_id,
+            "data": messages,
         })
 
     # ------------------------------------------------------------------
@@ -2737,6 +2878,7 @@ class APIServerAdapter(BasePlatformAdapter):
         conversation_history: List[Dict[str, str]],
         ephemeral_system_prompt: Optional[str] = None,
         session_id: Optional[str] = None,
+        user_id: Optional[str] = None,
         stream_delta_callback=None,
         tool_progress_callback=None,
         tool_start_callback=None,
@@ -2761,6 +2903,7 @@ class APIServerAdapter(BasePlatformAdapter):
             agent = self._create_agent(
                 ephemeral_system_prompt=ephemeral_system_prompt,
                 session_id=session_id,
+                user_id=user_id,
                 stream_delta_callback=stream_delta_callback,
                 tool_progress_callback=tool_progress_callback,
                 tool_start_callback=tool_start_callback,
@@ -2893,6 +3036,13 @@ class APIServerAdapter(BasePlatformAdapter):
         instructions = body.get("instructions")
         previous_response_id = body.get("previous_response_id")
 
+        # --- user_id for server-side session continuity ---
+        user_id = body.get("user_id")
+        if user_id is not None and not isinstance(user_id, str):
+            return web.json_response(_openai_error("'user_id' must be a string"), status=400)
+        if isinstance(user_id, str):
+            user_id = user_id.strip() or None
+
         # Accept explicit conversation_history from the request body.
         # Precedence: explicit conversation_history > previous_response_id.
         conversation_history: List[Dict[str, str]] = []
@@ -2937,9 +3087,38 @@ class APIServerAdapter(BasePlatformAdapter):
                         )
                     conversation_history.append({"role": msg["role"], "content": str(content)})
 
+        # Resolve session_id and load history together so they always match.
+        # Priority: body.session_id → previous_response_id → DB by user_id → generated run_id.
+        # Security: requires API key for DB lookups, matching X-Hermes-Session-Id policy.
         run_id = f"run_{uuid.uuid4().hex}"
-        session_id = body.get("session_id") or stored_session_id or run_id
-        approval_session_key = gateway_session_key or session_id or run_id
+        session_id = body.get("session_id") or stored_session_id
+
+        if not session_id and user_id and self._api_key:
+            try:
+                db = self._ensure_session_db()
+                if db is not None:
+                    session_id = db.get_active_session_id_for_user(user_id, source="api_server")
+            except Exception as e:
+                logger.warning("Failed to resolve session for user %s: %s", user_id, e)
+
+        if not session_id:
+            session_id = run_id
+
+        if not conversation_history and session_id != run_id and self._api_key:
+            try:
+                db = self._ensure_session_db()
+                if db is not None:
+                    restored = db.get_messages_as_conversation(session_id)
+                    if restored:
+                        conversation_history = restored
+                        logger.debug(
+                            "Restored %d messages from session %s",
+                            len(restored), session_id,
+                        )
+            except Exception as e:
+                logger.warning("Failed to restore session %s: %s", session_id, e)
+
+        approval_session_key = gateway_session_key or session_id
         ephemeral_system_prompt = instructions
         loop = asyncio.get_running_loop()
         q: "asyncio.Queue[Optional[Dict]]" = asyncio.Queue()
@@ -2978,6 +3157,7 @@ class APIServerAdapter(BasePlatformAdapter):
                 agent = self._create_agent(
                     ephemeral_system_prompt=ephemeral_system_prompt,
                     session_id=session_id,
+                    user_id=user_id,
                     stream_delta_callback=_text_cb,
                     tool_progress_callback=event_cb,
                     gateway_session_key=gateway_session_key,
@@ -3070,12 +3250,14 @@ class APIServerAdapter(BasePlatformAdapter):
                     )
                 else:
                     final_response = result.get("final_response", "") if isinstance(result, dict) else ""
+                    _eff_sid = getattr(agent, "session_id", session_id)
                     q.put_nowait({
                         "event": "run.completed",
                         "run_id": run_id,
                         "timestamp": time.time(),
                         "output": final_response,
                         "usage": usage,
+                        "session_id": _eff_sid if isinstance(_eff_sid, str) and _eff_sid else session_id,
                     })
                     self._set_run_status(
                         run_id,
@@ -3406,6 +3588,9 @@ class APIServerAdapter(BasePlatformAdapter):
             self._app.router.add_post("/v1/responses", self._handle_responses)
             self._app.router.add_get("/v1/responses/{response_id}", self._handle_get_response)
             self._app.router.add_delete("/v1/responses/{response_id}", self._handle_delete_response)
+            # Sessions API
+            self._app.router.add_get("/v1/sessions", self._handle_list_sessions)
+            self._app.router.add_get("/v1/sessions/{session_id}/messages", self._handle_get_session_messages)
             # Cron jobs management API
             self._app.router.add_get("/api/jobs", self._handle_list_jobs)
             self._app.router.add_post("/api/jobs", self._handle_create_job)
