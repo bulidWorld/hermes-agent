@@ -58,6 +58,7 @@ from gateway.platforms.base import (
     SendResult,
     is_network_accessible,
 )
+from gateway.platforms.custom import ExtensionAggregator
 
 logger = logging.getLogger(__name__)
 
@@ -270,8 +271,9 @@ def _normalize_multimodal_content(content: Any) -> Any:
 
         if part_type in _FILE_PART_TYPES:
             raise ValueError(
-                "unsupported_content_type:Inline image inputs are supported, "
-                "but uploaded files and document inputs are not supported on this endpoint."
+                "unsupported_content_type:Inline file parts are not supported. "
+                "Upload via POST /v1/files and reference via the 'attachments' "
+                "field in /v1/runs, /v1/chat/completions, or /v1/responses."
             )
 
         # Unknown part type — reject explicitly so clients get a clear error
@@ -719,6 +721,13 @@ class APIServerAdapter(BasePlatformAdapter):
         self._run_approval_sessions: Dict[str, str] = {}
         self._session_db: Optional[Any] = None  # Lazy-init SessionDB for session continuity
 
+        # ── Custom API extensions (file upload, sessions, etc.) ──
+        self._custom_extension: ExtensionAggregator = (
+            ExtensionAggregator.from_config(
+                extra, self._check_auth, self._ensure_session_db,
+            )
+        )
+
     @staticmethod
     def _parse_cors_origins(value: Any) -> tuple[str, ...]:
         """Normalize configured CORS origins into a stable tuple."""
@@ -1079,7 +1088,7 @@ class APIServerAdapter(BasePlatformAdapter):
         if auth_err:
             return auth_err
 
-        return web.json_response({
+        capabilities = {
             "object": "hermes.api_server.capabilities",
             "platform": "hermes-agent",
             "model": self._model_name,
@@ -1147,7 +1156,10 @@ class APIServerAdapter(BasePlatformAdapter):
                 "session_chat": {"method": "POST", "path": "/api/sessions/{session_id}/chat"},
                 "session_chat_stream": {"method": "POST", "path": "/api/sessions/{session_id}/chat/stream"},
             },
-        })
+        }
+        self._custom_extension.extend_capabilities(capabilities["features"])
+        self._custom_extension.extend_endpoints(capabilities["endpoints"])
+        return web.json_response(capabilities)
 
     async def _handle_skills(self, request: "web.Request") -> "web.Response":
         """GET /v1/skills — list installed skills visible to the API-server agent.
@@ -1304,6 +1316,7 @@ class APIServerAdapter(BasePlatformAdapter):
         except Exception as exc:
             logger.warning("Failed to load session history for %s: %s", session_id, exc)
             return []
+    
 
     async def _handle_list_sessions(self, request: "web.Request") -> "web.Response":
         """GET /api/sessions — list persisted Hermes sessions."""
@@ -1726,6 +1739,12 @@ class APIServerAdapter(BasePlatformAdapter):
                 {"error": {"message": "No user message found in messages", "type": "invalid_request_error"}},
                 status=400,
             )
+
+        # Inject file attachments (before session key parsing so file
+        # references are resolved before the agent runs).
+        user_message = await self._custom_extension.inject_attachments(
+            user_message, body.get("attachments", []),
+        )
 
         # Allow caller to scope long-term memory (e.g. Honcho) with a
         # stable per-channel identifier via X-Hermes-Session-Key.  This
@@ -2849,6 +2868,11 @@ class APIServerAdapter(BasePlatformAdapter):
         if not _content_has_visible_payload(user_message):
             return web.json_response(_openai_error("No user message found in input"), status=400)
 
+        # Inject file attachments
+        user_message = await self._custom_extension.inject_attachments(
+            user_message, body.get("attachments", []),
+        )
+
         # Truncation support
         if body.get("truncation") == "auto" and len(conversation_history) > 100:
             conversation_history = conversation_history[-100:]
@@ -3723,6 +3747,11 @@ class APIServerAdapter(BasePlatformAdapter):
         if not user_message:
             return web.json_response(_openai_error("No user message found in input"), status=400)
 
+        # Inject file attachments (resolved before the agent runs)
+        user_message = await self._custom_extension.inject_attachments(
+            user_message, body.get("attachments", []),
+        )
+
         instructions = body.get("instructions")
         previous_response_id = body.get("previous_response_id")
 
@@ -4290,9 +4319,6 @@ class APIServerAdapter(BasePlatformAdapter):
             self._app.router.add_post("/v1/responses", self._handle_responses)
             self._app.router.add_get("/v1/responses/{response_id}", self._handle_get_response)
             self._app.router.add_delete("/v1/responses/{response_id}", self._handle_delete_response)
-            # Sessions API
-            self._app.router.add_get("/v1/sessions", self._handle_list_sessions)
-            self._app.router.add_get("/v1/sessions/{session_id}/messages", self._handle_get_session_messages)
             # Cron jobs management API
             self._app.router.add_get("/api/jobs", self._handle_list_jobs)
             self._app.router.add_post("/api/jobs", self._handle_create_job)
@@ -4314,6 +4340,8 @@ class APIServerAdapter(BasePlatformAdapter):
             # upstream session-control handlers.
             self._app["api_server_adapter"] = self
 
+            # Register custom API extension routes (file upload, sessions, …)
+            self._custom_extension.register_routes(self._app)
             # Start background sweep to clean up orphaned (unconsumed) run streams
             sweep_task = asyncio.create_task(self._sweep_orphaned_runs())
             try:
@@ -4386,6 +4414,7 @@ class APIServerAdapter(BasePlatformAdapter):
         if self._runner:
             await self._runner.cleanup()
             self._runner = None
+        await self._custom_extension.close()
         self._app = None
         logger.info("[%s] API server stopped", self.name)
 
