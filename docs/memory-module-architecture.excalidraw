@@ -1,0 +1,2227 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "elements": [
+    {
+      "id": "t0",
+      "type": "text",
+      "x": 570,
+      "y": 5,
+      "width": 480,
+      "height": 36,
+      "text": "Memory 模块架构图",
+      "fontSize": 28,
+      "fontFamily": 5,
+      "strokeColor": "#1a1a1a",
+      "textAlign": "center",
+      "roughness": 0
+    },
+    {
+      "id": "L1-bg",
+      "type": "rectangle",
+      "x": 50,
+      "y": 60,
+      "width": 1560,
+      "height": 340,
+      "strokeColor": "#90CAF9",
+      "backgroundColor": "#E3F2FD",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [],
+      "opacity": 35
+    },
+    {
+      "id": "L1-lbl",
+      "type": "text",
+      "x": 65,
+      "y": 68,
+      "width": 180,
+      "height": 36,
+      "text": "核心抽象层\nCore Abstraction",
+      "fontSize": 15,
+      "fontFamily": 5,
+      "strokeColor": "#1565C0",
+      "textAlign": "left",
+      "roughness": 0
+    },
+    {
+      "id": "L2-bg",
+      "type": "rectangle",
+      "x": 50,
+      "y": 485,
+      "width": 1560,
+      "height": 320,
+      "strokeColor": "#A5D6A7",
+      "backgroundColor": "#E8F5E9",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [],
+      "opacity": 35
+    },
+    {
+      "id": "L2-lbl",
+      "type": "text",
+      "x": 65,
+      "y": 493,
+      "width": 180,
+      "height": 36,
+      "text": "内置记忆层\nBuilt-in Memory",
+      "fontSize": 15,
+      "fontFamily": 5,
+      "strokeColor": "#2E7D32",
+      "textAlign": "left",
+      "roughness": 0
+    },
+    {
+      "id": "L3-bg",
+      "type": "rectangle",
+      "x": 50,
+      "y": 885,
+      "width": 1560,
+      "height": 270,
+      "strokeColor": "#FFCC80",
+      "backgroundColor": "#FFF3E0",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [],
+      "opacity": 35
+    },
+    {
+      "id": "L3-lbl",
+      "type": "text",
+      "x": 65,
+      "y": 893,
+      "width": 180,
+      "height": 36,
+      "text": "插件发现层\nPlugin Discovery",
+      "fontSize": 15,
+      "fontFamily": 5,
+      "strokeColor": "#E65100",
+      "textAlign": "left",
+      "roughness": 0
+    },
+    {
+      "id": "L4-bg",
+      "type": "rectangle",
+      "x": 50,
+      "y": 1235,
+      "width": 1560,
+      "height": 650,
+      "strokeColor": "#CE93D8",
+      "backgroundColor": "#F3E5F5",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [],
+      "opacity": 35
+    },
+    {
+      "id": "L4-lbl",
+      "type": "text",
+      "x": 65,
+      "y": 1243,
+      "width": 180,
+      "height": 36,
+      "text": "外部记忆插件层\nExternal Plugins",
+      "fontSize": 15,
+      "fontFamily": 5,
+      "strokeColor": "#6A1B9A",
+      "textAlign": "left",
+      "roughness": 0
+    },
+    {
+      "id": "L5-bg",
+      "type": "rectangle",
+      "x": 50,
+      "y": 1965,
+      "width": 1560,
+      "height": 750,
+      "strokeColor": "#F48FB1",
+      "backgroundColor": "#FCE4EC",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [],
+      "opacity": 35
+    },
+    {
+      "id": "L5-lbl",
+      "type": "text",
+      "x": 65,
+      "y": 1973,
+      "width": 180,
+      "height": 36,
+      "text": "Agent集成层\nAgent Integration",
+      "fontSize": 15,
+      "fontFamily": 5,
+      "strokeColor": "#880E4F",
+      "textAlign": "left",
+      "roughness": 0
+    },
+    {
+      "id": "L6-bg",
+      "type": "rectangle",
+      "x": 50,
+      "y": 2800,
+      "width": 1560,
+      "height": 280,
+      "strokeColor": "#B0BEC5",
+      "backgroundColor": "#ECEFF1",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [],
+      "opacity": 35
+    },
+    {
+      "id": "L6-lbl",
+      "type": "text",
+      "x": 65,
+      "y": 2808,
+      "width": 180,
+      "height": 36,
+      "text": "用户配置层\nUser Setup",
+      "fontSize": 15,
+      "fontFamily": 5,
+      "strokeColor": "#37474F",
+      "textAlign": "left",
+      "roughness": 0
+    },
+    {
+      "id": "b-mp",
+      "type": "rectangle",
+      "x": 180,
+      "y": 105,
+      "width": 530,
+      "height": 165,
+      "strokeColor": "#1976D2",
+      "backgroundColor": "#fff",
+      "fillStyle": "solid",
+      "strokeWidth": 2.5,
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "mp-t",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "mp-t",
+      "type": "text",
+      "x": 192,
+      "y": 113,
+      "width": 506,
+      "height": 149,
+      "text": "agent/memory_provider.py\nMemoryProvider (ABC 抽象基类)\n\n定义所有记忆后端统一接口契约\n初始化 · 工具schema · 生命周期钩子",
+      "fontSize": 12,
+      "fontFamily": 5,
+      "strokeColor": "#222",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "b-mp",
+      "roughness": 0
+    },
+    {
+      "id": "b-mm",
+      "type": "rectangle",
+      "x": 900,
+      "y": 105,
+      "width": 560,
+      "height": 165,
+      "strokeColor": "#1976D2",
+      "backgroundColor": "#fff",
+      "fillStyle": "solid",
+      "strokeWidth": 2.5,
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "mm-t",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "mm-t",
+      "type": "text",
+      "x": 912,
+      "y": 113,
+      "width": 536,
+      "height": 149,
+      "text": "agent/memory_manager.py\nMemoryManager (编排器)\n\n编排内置+外部记忆提供者 · 管理turn生命周期\n工具路由 · 记忆上下文注入 · 流式清洗",
+      "fontSize": 12,
+      "fontFamily": 5,
+      "strokeColor": "#222",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "b-mm",
+      "roughness": 0
+    },
+    {
+      "id": "b-mt",
+      "type": "rectangle",
+      "x": 180,
+      "y": 525,
+      "width": 530,
+      "height": 155,
+      "strokeColor": "#43A047",
+      "backgroundColor": "#fff",
+      "fillStyle": "solid",
+      "strokeWidth": 2.5,
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "mt-t",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "mt-t",
+      "type": "text",
+      "x": 192,
+      "y": 533,
+      "width": 506,
+      "height": 139,
+      "text": "tools/memory_tool.py\nMemoryStore (文件记忆存储)\n\nMEMORY.md + USER.md 持久化存储\nadd / replace / remove · 冻结快照 · 外部漂移检测",
+      "fontSize": 12,
+      "fontFamily": 5,
+      "strokeColor": "#222",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "b-mt",
+      "roughness": 0
+    },
+    {
+      "id": "b-tp",
+      "type": "rectangle",
+      "x": 900,
+      "y": 525,
+      "width": 560,
+      "height": 155,
+      "strokeColor": "#43A047",
+      "backgroundColor": "#fff",
+      "fillStyle": "solid",
+      "strokeWidth": 2.5,
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "tp-t",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "tp-t",
+      "type": "text",
+      "x": 912,
+      "y": 533,
+      "width": 536,
+      "height": 139,
+      "text": "tools/threat_patterns.py\n安全扫描 (模式检测)\n\n注入与泄露模式检测共享库\n记忆写入时安全检查 · BLOCKED 占位替换",
+      "fontSize": 12,
+      "fontFamily": 5,
+      "strokeColor": "#222",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "b-tp",
+      "roughness": 0
+    },
+    {
+      "id": "b-pi",
+      "type": "rectangle",
+      "x": 320,
+      "y": 930,
+      "width": 840,
+      "height": 150,
+      "strokeColor": "#F57C00",
+      "backgroundColor": "#fff",
+      "fillStyle": "solid",
+      "strokeWidth": 2.5,
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "pi-t",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "pi-t",
+      "type": "text",
+      "x": 332,
+      "y": 938,
+      "width": 816,
+      "height": 134,
+      "text": "plugins/memory/__init__.py\n提供者发现与加载 (Plugin Loader)\n\n扫描内置+用户安装的记忆插件目录 → register(ctx) 模式加载\n内置插件优先 · 同名覆盖保护 · MemoryProvider 子类检测",
+      "fontSize": 12,
+      "fontFamily": 5,
+      "strokeColor": "#222",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "b-pi",
+      "roughness": 0
+    },
+    {
+      "id": "b-ho",
+      "type": "rectangle",
+      "x": 110,
+      "y": 1285,
+      "width": 310,
+      "height": 190,
+      "strokeColor": "#8E24AA",
+      "backgroundColor": "#fff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "ho-t",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "ho-t",
+      "type": "text",
+      "x": 122,
+      "y": 1293,
+      "width": 286,
+      "height": 174,
+      "text": "holographic/\nHolographicMemoryProvider\n\nSQLite + HRR 向量检索\n实体解析 · 信任评分",
+      "fontSize": 10,
+      "fontFamily": 5,
+      "strokeColor": "#222",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "b-ho",
+      "roughness": 0
+    },
+    {
+      "id": "b-hc",
+      "type": "rectangle",
+      "x": 430,
+      "y": 1285,
+      "width": 310,
+      "height": 190,
+      "strokeColor": "#8E24AA",
+      "backgroundColor": "#fff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "hc-t",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "hc-t",
+      "type": "text",
+      "x": 442,
+      "y": 1293,
+      "width": 286,
+      "height": 174,
+      "text": "honcho/\nHonchoMemoryProvider\n\n云端 AI 原生记忆\n辩证推理 · 可配置召回模式",
+      "fontSize": 10,
+      "fontFamily": 5,
+      "strokeColor": "#222",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "b-hc",
+      "roughness": 0
+    },
+    {
+      "id": "b-hd",
+      "type": "rectangle",
+      "x": 760,
+      "y": 1285,
+      "width": 310,
+      "height": 190,
+      "strokeColor": "#8E24AA",
+      "backgroundColor": "#fff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "hd-t",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "hd-t",
+      "type": "text",
+      "x": 772,
+      "y": 1293,
+      "width": 286,
+      "height": 174,
+      "text": "hindsight/\nHindsightMemoryProvider\n\n知识图谱记忆\n多策略检索 cloud / local",
+      "fontSize": 10,
+      "fontFamily": 5,
+      "strokeColor": "#222",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "b-hd",
+      "roughness": 0
+    },
+    {
+      "id": "b-m0",
+      "type": "rectangle",
+      "x": 1090,
+      "y": 1285,
+      "width": 310,
+      "height": 190,
+      "strokeColor": "#8E24AA",
+      "backgroundColor": "#fff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "m0-t",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "m0-t",
+      "type": "text",
+      "x": 1102,
+      "y": 1293,
+      "width": 286,
+      "height": 174,
+      "text": "mem0/\nMem0MemoryProvider\n\nLLM 事实提取\n熔断器保护",
+      "fontSize": 10,
+      "fontFamily": 5,
+      "strokeColor": "#222",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "b-m0",
+      "roughness": 0
+    },
+    {
+      "id": "b-ov",
+      "type": "rectangle",
+      "x": 110,
+      "y": 1515,
+      "width": 310,
+      "height": 190,
+      "strokeColor": "#8E24AA",
+      "backgroundColor": "#fff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "ov-t",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "ov-t",
+      "type": "text",
+      "x": 122,
+      "y": 1523,
+      "width": 286,
+      "height": 174,
+      "text": "openviking/\nOpenVikingMemoryProvider\n\n文件系统层级记忆\nviking:// URI 寻址 · L0/L1/L2",
+      "fontSize": 10,
+      "fontFamily": 5,
+      "strokeColor": "#222",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "b-ov",
+      "roughness": 0
+    },
+    {
+      "id": "b-rd",
+      "type": "rectangle",
+      "x": 430,
+      "y": 1515,
+      "width": 310,
+      "height": 190,
+      "strokeColor": "#8E24AA",
+      "backgroundColor": "#fff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "rd-t",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "rd-t",
+      "type": "text",
+      "x": 442,
+      "y": 1523,
+      "width": 286,
+      "height": 174,
+      "text": "retaindb/\nRetainDBMemoryProvider\n\n云端混合搜索\n持久化写入队列",
+      "fontSize": 10,
+      "fontFamily": 5,
+      "strokeColor": "#222",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "b-rd",
+      "roughness": 0
+    },
+    {
+      "id": "b-sm",
+      "type": "rectangle",
+      "x": 760,
+      "y": 1515,
+      "width": 310,
+      "height": 190,
+      "strokeColor": "#8E24AA",
+      "backgroundColor": "#fff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "sm-t",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "sm-t",
+      "type": "text",
+      "x": 772,
+      "y": 1523,
+      "width": 286,
+      "height": 174,
+      "text": "supermemory/\nSupermemoryMemoryProvider\n\n语义长期记忆\n多容器 · 自动捕获",
+      "fontSize": 10,
+      "fontFamily": 5,
+      "strokeColor": "#222",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "b-sm",
+      "roughness": 0
+    },
+    {
+      "id": "b-br",
+      "type": "rectangle",
+      "x": 1090,
+      "y": 1515,
+      "width": 310,
+      "height": 190,
+      "strokeColor": "#8E24AA",
+      "backgroundColor": "#fff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "br-t",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "br-t",
+      "type": "text",
+      "x": 1102,
+      "y": 1523,
+      "width": 286,
+      "height": 174,
+      "text": "byterover/\nByteRoverMemoryProvider\n\nCLI 知识树 (brv)\n预压缩提取",
+      "fontSize": 10,
+      "fontFamily": 5,
+      "strokeColor": "#222",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "b-br",
+      "roughness": 0
+    },
+    {
+      "id": "b-ai",
+      "type": "rectangle",
+      "x": 100,
+      "y": 2010,
+      "width": 300,
+      "height": 195,
+      "strokeColor": "#D81B60",
+      "backgroundColor": "#fff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "ai-t",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "ai-t",
+      "type": "text",
+      "x": 112,
+      "y": 2018,
+      "width": 276,
+      "height": 179,
+      "text": "agent/agent_init.py\n初始化入口\n\n创建 MemoryStore+Manager\n加载外部提供者 · 注入schema",
+      "fontSize": 11,
+      "fontFamily": 5,
+      "strokeColor": "#222",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "b-ai",
+      "roughness": 0
+    },
+    {
+      "id": "b-cl",
+      "type": "rectangle",
+      "x": 420,
+      "y": 2010,
+      "width": 300,
+      "height": 195,
+      "strokeColor": "#D81B60",
+      "backgroundColor": "#fff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "cl-t",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "cl-t",
+      "type": "text",
+      "x": 432,
+      "y": 2018,
+      "width": 276,
+      "height": 179,
+      "text": "agent/conversation_loop.py\n会话循环 (Turn Loop)\n\nprefetch → 注入上下文\n→ sync → queue_prefetch",
+      "fontSize": 11,
+      "fontFamily": 5,
+      "strokeColor": "#222",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "b-cl",
+      "roughness": 0
+    },
+    {
+      "id": "b-rh",
+      "type": "rectangle",
+      "x": 740,
+      "y": 2010,
+      "width": 300,
+      "height": 195,
+      "strokeColor": "#D81B60",
+      "backgroundColor": "#fff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "rh-t",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "rh-t",
+      "type": "text",
+      "x": 752,
+      "y": 2018,
+      "width": 276,
+      "height": 179,
+      "text": "agent/agent_runtime_helpers.py\n工具分发 (Tool Dispatch)\n\n处理 memory 工具调用\non_memory_write 桥接写入",
+      "fontSize": 11,
+      "fontFamily": 5,
+      "strokeColor": "#222",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "b-rh",
+      "roughness": 0
+    },
+    {
+      "id": "b-sp",
+      "type": "rectangle",
+      "x": 1060,
+      "y": 2010,
+      "width": 300,
+      "height": 195,
+      "strokeColor": "#D81B60",
+      "backgroundColor": "#fff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "sp-t",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "sp-t",
+      "type": "text",
+      "x": 1072,
+      "y": 2018,
+      "width": 276,
+      "height": 179,
+      "text": "agent/system_prompt.py\n系统提示词构建\n\n组装系统提示词\n注入 MEMORY.md 快照",
+      "fontSize": 11,
+      "fontFamily": 5,
+      "strokeColor": "#222",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "b-sp",
+      "roughness": 0
+    },
+    {
+      "id": "b-ra",
+      "type": "rectangle",
+      "x": 260,
+      "y": 2265,
+      "width": 300,
+      "height": 195,
+      "strokeColor": "#D81B60",
+      "backgroundColor": "#fff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "ra-t",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "ra-t",
+      "type": "text",
+      "x": 272,
+      "y": 2273,
+      "width": 276,
+      "height": 179,
+      "text": "run_agent.py\n主 Agent 类\n\n_sync_external_memory\n_for_turn() 后轮同步",
+      "fontSize": 11,
+      "fontFamily": 5,
+      "strokeColor": "#222",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "b-ra",
+      "roughness": 0
+    },
+    {
+      "id": "b-br2",
+      "type": "rectangle",
+      "x": 710,
+      "y": 2265,
+      "width": 300,
+      "height": 195,
+      "strokeColor": "#D81B60",
+      "backgroundColor": "#fff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "br2-t",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "br2-t",
+      "type": "text",
+      "x": 722,
+      "y": 2273,
+      "width": 276,
+      "height": 179,
+      "text": "agent/background_review.py\n后台审查线程\n\n定期审查记忆质量\n触发整理与清理",
+      "fontSize": 11,
+      "fontFamily": 5,
+      "strokeColor": "#222",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "b-br2",
+      "roughness": 0
+    },
+    {
+      "id": "b-cc",
+      "type": "rectangle",
+      "x": 1160,
+      "y": 2265,
+      "width": 300,
+      "height": 195,
+      "strokeColor": "#D81B60",
+      "backgroundColor": "#fff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "cc-t",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "cc-t",
+      "type": "text",
+      "x": 1172,
+      "y": 2273,
+      "width": 276,
+      "height": 179,
+      "text": "agent/context_compressor.py\n上下文压缩钩子\n\non_pre_compress\n提取即将丢弃的记忆",
+      "fontSize": 11,
+      "fontFamily": 5,
+      "strokeColor": "#222",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "b-cc",
+      "roughness": 0
+    },
+    {
+      "id": "b-ms",
+      "type": "rectangle",
+      "x": 380,
+      "y": 2850,
+      "width": 720,
+      "height": 155,
+      "strokeColor": "#607D8B",
+      "backgroundColor": "#fff",
+      "fillStyle": "solid",
+      "strokeWidth": 2.5,
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "ms-t",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "ms-t",
+      "type": "text",
+      "x": 392,
+      "y": 2858,
+      "width": 696,
+      "height": 139,
+      "text": "hermes_cli/memory_setup.py\n交互式配置向导 (Setup Wizard)\n\n终端交互选择记忆后端 · 自动安装依赖\n写入配置文件 · 支持多后端切换",
+      "fontSize": 12,
+      "fontFamily": 5,
+      "strokeColor": "#222",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "b-ms",
+      "roughness": 0
+    },
+    {
+      "id": "a1",
+      "type": "arrow",
+      "x": 710,
+      "y": 187.5,
+      "width": 195,
+      "height": 1,
+      "points": [
+        [
+          195,
+          0.0
+        ],
+        [
+          0,
+          0.0
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#1976D2",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "strokeStyle": "dashed"
+    },
+    {
+      "id": "1fed27bd",
+      "type": "text",
+      "x": 813.5,
+      "y": 180.5,
+      "width": 70,
+      "height": 14,
+      "text": "聚合",
+      "fontSize": 9,
+      "fontFamily": 5,
+      "strokeColor": "#1976D2",
+      "textAlign": "left",
+      "roughness": 0
+    },
+    {
+      "id": "a20",
+      "type": "arrow",
+      "x": 250.0,
+      "y": 295,
+      "width": 1340.0,
+      "height": 1710,
+      "points": [
+        [
+          0.0,
+          1710
+        ],
+        [
+          0.0,
+          1695
+        ],
+        [
+          1340.0,
+          1695
+        ],
+        [
+          1340.0,
+          0
+        ],
+        [
+          1225.0,
+          0
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#D81B60",
+      "strokeWidth": 1.2,
+      "roughness": 0
+    },
+    {
+      "id": "1ee112fc",
+      "type": "text",
+      "x": 1037.0,
+      "y": 1308.0,
+      "width": 70,
+      "height": 14,
+      "text": "创建并使用",
+      "fontSize": 9,
+      "fontFamily": 5,
+      "strokeColor": "#D81B60",
+      "textAlign": "left",
+      "roughness": 0
+    },
+    {
+      "id": "a21",
+      "type": "arrow",
+      "x": 570.0,
+      "y": 317,
+      "width": 1010.0,
+      "height": 1688,
+      "points": [
+        [
+          0.0,
+          1688
+        ],
+        [
+          0.0,
+          1668
+        ],
+        [
+          1010.0,
+          1668
+        ],
+        [
+          1010.0,
+          0
+        ],
+        [
+          905.0,
+          0
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#D81B60",
+      "strokeWidth": 1.2,
+      "roughness": 0
+    },
+    {
+      "id": "b9875b34",
+      "type": "text",
+      "x": 1161.0,
+      "y": 1314.8,
+      "width": 70,
+      "height": 14,
+      "text": "prefetch/sync",
+      "fontSize": 9,
+      "fontFamily": 5,
+      "strokeColor": "#D81B60",
+      "textAlign": "left",
+      "roughness": 0
+    },
+    {
+      "id": "a22",
+      "type": "arrow",
+      "x": 890.0,
+      "y": 339,
+      "width": 680.0,
+      "height": 1666,
+      "points": [
+        [
+          0.0,
+          1666
+        ],
+        [
+          0.0,
+          1641
+        ],
+        [
+          680.0,
+          1641
+        ],
+        [
+          680.0,
+          0
+        ],
+        [
+          585.0,
+          0
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#D81B60",
+      "strokeWidth": 1.2,
+      "roughness": 0
+    },
+    {
+      "id": "5d288814",
+      "type": "text",
+      "x": 1285.0,
+      "y": 1321.6,
+      "width": 70,
+      "height": 14,
+      "text": "桥接tool",
+      "fontSize": 9,
+      "fontFamily": 5,
+      "strokeColor": "#D81B60",
+      "textAlign": "left",
+      "roughness": 0
+    },
+    {
+      "id": "a23",
+      "type": "arrow",
+      "x": 1210.0,
+      "y": 361,
+      "width": 350.0,
+      "height": 1644,
+      "points": [
+        [
+          0.0,
+          1644
+        ],
+        [
+          0.0,
+          1614
+        ],
+        [
+          350.0,
+          1614
+        ],
+        [
+          350.0,
+          0
+        ],
+        [
+          265.0,
+          0
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#D81B60",
+      "strokeWidth": 1.2,
+      "roughness": 0
+    },
+    {
+      "id": "e528b7a3",
+      "type": "text",
+      "x": 1409.0,
+      "y": 1328.4,
+      "width": 70,
+      "height": 14,
+      "text": "构建提示",
+      "fontSize": 9,
+      "fontFamily": 5,
+      "strokeColor": "#D81B60",
+      "textAlign": "left",
+      "roughness": 0
+    },
+    {
+      "id": "a6",
+      "type": "arrow",
+      "x": 710,
+      "y": 602.5,
+      "width": 350,
+      "height": 1505.0,
+      "points": [
+        [
+          350,
+          1505.0
+        ],
+        [
+          300,
+          1505.0
+        ],
+        [
+          300,
+          57.5
+        ],
+        [
+          0,
+          0.0
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#D81B60",
+      "strokeWidth": 1.2,
+      "roughness": 0
+    },
+    {
+      "id": "f523dcb4",
+      "type": "text",
+      "x": 953.5,
+      "y": 1362.375,
+      "width": 70,
+      "height": 14,
+      "text": "读取快照",
+      "fontSize": 9,
+      "fontFamily": 5,
+      "strokeColor": "#D81B60",
+      "textAlign": "left",
+      "roughness": 0
+    },
+    {
+      "id": "a7",
+      "type": "arrow",
+      "x": 105,
+      "y": 1080,
+      "width": 635.0,
+      "height": 925,
+      "points": [
+        [
+          145.0,
+          925
+        ],
+        [
+          0,
+          925
+        ],
+        [
+          0,
+          15
+        ],
+        [
+          635.0,
+          0
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#D81B60",
+      "strokeWidth": 1.2,
+      "roughness": 0
+    },
+    {
+      "id": "1103e7ed",
+      "type": "text",
+      "x": 306.0,
+      "y": 1539.25,
+      "width": 70,
+      "height": 14,
+      "text": "调用加载",
+      "fontSize": 9,
+      "fontFamily": 5,
+      "strokeColor": "#D81B60",
+      "textAlign": "left",
+      "roughness": 0
+    },
+    {
+      "id": "a8-ho",
+      "type": "arrow",
+      "x": 95,
+      "y": 135,
+      "width": 93,
+      "height": 1245.0,
+      "points": [
+        [
+          15,
+          1245.0
+        ],
+        [
+          0,
+          1245.0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          93,
+          0
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#8E24AA",
+      "strokeWidth": 0.8,
+      "roughness": 0,
+      "strokeStyle": "dashed"
+    },
+    {
+      "id": "5618353a",
+      "type": "text",
+      "x": 128.0,
+      "y": 750.5,
+      "width": 70,
+      "height": 14,
+      "text": "extends",
+      "fontSize": 9,
+      "fontFamily": 5,
+      "strokeColor": "#8E24AA",
+      "textAlign": "left",
+      "roughness": 0
+    },
+    {
+      "id": "a8-ov",
+      "type": "arrow",
+      "x": 95,
+      "y": 157,
+      "width": 93,
+      "height": 1453.0,
+      "points": [
+        [
+          15,
+          1453.0
+        ],
+        [
+          0,
+          1453.0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          93,
+          0
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#8E24AA",
+      "strokeWidth": 0.8,
+      "roughness": 0,
+      "strokeStyle": "dashed"
+    },
+    {
+      "id": "a8-hc",
+      "type": "arrow",
+      "x": 95,
+      "y": 179,
+      "width": 335,
+      "height": 1201.0,
+      "points": [
+        [
+          335,
+          1201.0
+        ],
+        [
+          0,
+          1201.0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          93,
+          0
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#8E24AA",
+      "strokeWidth": 0.8,
+      "roughness": 0,
+      "strokeStyle": "dashed"
+    },
+    {
+      "id": "a8-rd",
+      "type": "arrow",
+      "x": 95,
+      "y": 201,
+      "width": 335,
+      "height": 1409.0,
+      "points": [
+        [
+          335,
+          1409.0
+        ],
+        [
+          0,
+          1409.0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          93,
+          0
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#8E24AA",
+      "strokeWidth": 0.8,
+      "roughness": 0,
+      "strokeStyle": "dashed"
+    },
+    {
+      "id": "a8-hd",
+      "type": "arrow",
+      "x": 95,
+      "y": 223,
+      "width": 665,
+      "height": 1157.0,
+      "points": [
+        [
+          665,
+          1157.0
+        ],
+        [
+          0,
+          1157.0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          93,
+          0
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#8E24AA",
+      "strokeWidth": 0.8,
+      "roughness": 0,
+      "strokeStyle": "dashed"
+    },
+    {
+      "id": "a8-sm",
+      "type": "arrow",
+      "x": 95,
+      "y": 245,
+      "width": 665,
+      "height": 1365.0,
+      "points": [
+        [
+          665,
+          1365.0
+        ],
+        [
+          0,
+          1365.0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          93,
+          0
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#8E24AA",
+      "strokeWidth": 0.8,
+      "roughness": 0,
+      "strokeStyle": "dashed"
+    },
+    {
+      "id": "a8-m0",
+      "type": "arrow",
+      "x": 95,
+      "y": 267,
+      "width": 995,
+      "height": 1113.0,
+      "points": [
+        [
+          995,
+          1113.0
+        ],
+        [
+          0,
+          1113.0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          93,
+          0
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#8E24AA",
+      "strokeWidth": 0.8,
+      "roughness": 0,
+      "strokeStyle": "dashed"
+    },
+    {
+      "id": "a8-br",
+      "type": "arrow",
+      "x": 95,
+      "y": 289,
+      "width": 995,
+      "height": 1321.0,
+      "points": [
+        [
+          995,
+          1321.0
+        ],
+        [
+          0,
+          1321.0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          93,
+          0
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#8E24AA",
+      "strokeWidth": 0.8,
+      "roughness": 0,
+      "strokeStyle": "dashed"
+    },
+    {
+      "id": "a9-bus",
+      "type": "arrow",
+      "x": 740.0,
+      "y": 1080,
+      "width": 1,
+      "height": 28,
+      "points": [
+        [
+          0.0,
+          0
+        ],
+        [
+          0.0,
+          28
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#F57C00",
+      "strokeWidth": 1.2,
+      "roughness": 0
+    },
+    {
+      "id": "f416693a",
+      "type": "text",
+      "x": 746.0,
+      "y": 1087.0,
+      "width": 70,
+      "height": 14,
+      "text": "发现并加载",
+      "fontSize": 9,
+      "fontFamily": 5,
+      "strokeColor": "#F57C00",
+      "textAlign": "left",
+      "roughness": 0
+    },
+    {
+      "id": "a9a-ho",
+      "type": "arrow",
+      "x": 265.0,
+      "y": 1108,
+      "width": 1,
+      "height": 177,
+      "points": [
+        [
+          0.0,
+          0
+        ],
+        [
+          0.0,
+          177
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#F57C00",
+      "strokeWidth": 1,
+      "roughness": 0
+    },
+    {
+      "id": "a9a-hc",
+      "type": "arrow",
+      "x": 585.0,
+      "y": 1108,
+      "width": 1,
+      "height": 177,
+      "points": [
+        [
+          0.0,
+          0
+        ],
+        [
+          0.0,
+          177
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#F57C00",
+      "strokeWidth": 1,
+      "roughness": 0
+    },
+    {
+      "id": "a9a-hd",
+      "type": "arrow",
+      "x": 915.0,
+      "y": 1108,
+      "width": 1,
+      "height": 177,
+      "points": [
+        [
+          0.0,
+          0
+        ],
+        [
+          0.0,
+          177
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#F57C00",
+      "strokeWidth": 1,
+      "roughness": 0
+    },
+    {
+      "id": "a9a-m0",
+      "type": "arrow",
+      "x": 1245.0,
+      "y": 1108,
+      "width": 1,
+      "height": 177,
+      "points": [
+        [
+          0.0,
+          0
+        ],
+        [
+          0.0,
+          177
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#F57C00",
+      "strokeWidth": 1,
+      "roughness": 0
+    },
+    {
+      "id": "a9b-ov",
+      "type": "arrow",
+      "x": 265.0,
+      "y": 1108,
+      "width": 1,
+      "height": 407,
+      "points": [
+        [
+          0.0,
+          0
+        ],
+        [
+          0.0,
+          15
+        ],
+        [
+          0.0,
+          407
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#F57C00",
+      "strokeWidth": 1,
+      "roughness": 0
+    },
+    {
+      "id": "a9b-rd",
+      "type": "arrow",
+      "x": 585.0,
+      "y": 1108,
+      "width": 1,
+      "height": 407,
+      "points": [
+        [
+          0.0,
+          0
+        ],
+        [
+          0.0,
+          15
+        ],
+        [
+          0.0,
+          407
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#F57C00",
+      "strokeWidth": 1,
+      "roughness": 0
+    },
+    {
+      "id": "a9b-sm",
+      "type": "arrow",
+      "x": 915.0,
+      "y": 1108,
+      "width": 1,
+      "height": 407,
+      "points": [
+        [
+          0.0,
+          0
+        ],
+        [
+          0.0,
+          15
+        ],
+        [
+          0.0,
+          407
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#F57C00",
+      "strokeWidth": 1,
+      "roughness": 0
+    },
+    {
+      "id": "a9b-br",
+      "type": "arrow",
+      "x": 1245.0,
+      "y": 1108,
+      "width": 1,
+      "height": 407,
+      "points": [
+        [
+          0.0,
+          0
+        ],
+        [
+          0.0,
+          15
+        ],
+        [
+          0.0,
+          407
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#F57C00",
+      "strokeWidth": 1,
+      "roughness": 0
+    },
+    {
+      "id": "a10",
+      "type": "arrow",
+      "x": 105,
+      "y": 1080,
+      "width": 635.0,
+      "height": 1765,
+      "points": [
+        [
+          635.0,
+          1765
+        ],
+        [
+          0,
+          1765
+        ],
+        [
+          0,
+          15
+        ],
+        [
+          635.0,
+          0
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#607D8B",
+      "strokeWidth": 1.2,
+      "roughness": 0
+    },
+    {
+      "id": "91ad5383",
+      "type": "text",
+      "x": 428.5,
+      "y": 1959.25,
+      "width": 70,
+      "height": 14,
+      "text": "调用发现",
+      "fontSize": 9,
+      "fontFamily": 5,
+      "strokeColor": "#607D8B",
+      "textAlign": "left",
+      "roughness": 0
+    },
+    {
+      "id": "a110",
+      "type": "arrow",
+      "x": 410.0,
+      "y": 285,
+      "width": 1110.0,
+      "height": 1975,
+      "points": [
+        [
+          0.0,
+          1975
+        ],
+        [
+          0.0,
+          1960
+        ],
+        [
+          1110.0,
+          1960
+        ],
+        [
+          1110.0,
+          0
+        ],
+        [
+          1065.0,
+          0
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#D81B60",
+      "strokeWidth": 1.2,
+      "roughness": 0
+    },
+    {
+      "id": "c3743185",
+      "type": "text",
+      "x": 1073.0,
+      "y": 1457.0,
+      "width": 70,
+      "height": 14,
+      "text": "调用sync",
+      "fontSize": 9,
+      "fontFamily": 5,
+      "strokeColor": "#D81B60",
+      "textAlign": "left",
+      "roughness": 0
+    },
+    {
+      "id": "a111",
+      "type": "arrow",
+      "x": 860.0,
+      "y": 285,
+      "width": 646.0,
+      "height": 1975,
+      "points": [
+        [
+          0.0,
+          1975
+        ],
+        [
+          0.0,
+          1960
+        ],
+        [
+          646.0,
+          1960
+        ],
+        [
+          646.0,
+          0
+        ],
+        [
+          615.0,
+          0
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#D81B60",
+      "strokeWidth": 1.2,
+      "roughness": 0
+    },
+    {
+      "id": "c34a701f",
+      "type": "text",
+      "x": 1247.4,
+      "y": 1457.0,
+      "width": 70,
+      "height": 14,
+      "text": "后台审查",
+      "fontSize": 9,
+      "fontFamily": 5,
+      "strokeColor": "#D81B60",
+      "textAlign": "left",
+      "roughness": 0
+    },
+    {
+      "id": "a112",
+      "type": "arrow",
+      "x": 1310.0,
+      "y": 285,
+      "width": 182.0,
+      "height": 1975,
+      "points": [
+        [
+          0.0,
+          1975
+        ],
+        [
+          0.0,
+          1960
+        ],
+        [
+          182.0,
+          1960
+        ],
+        [
+          182.0,
+          0
+        ],
+        [
+          165.0,
+          0
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#D81B60",
+      "strokeWidth": 1.2,
+      "roughness": 0
+    },
+    {
+      "id": "cdff082c",
+      "type": "text",
+      "x": 1421.8,
+      "y": 1457.0,
+      "width": 70,
+      "height": 14,
+      "text": "压缩钩子",
+      "fontSize": 9,
+      "fontFamily": 5,
+      "strokeColor": "#D81B60",
+      "textAlign": "left",
+      "roughness": 0
+    },
+    {
+      "id": "a14",
+      "type": "arrow",
+      "x": 710,
+      "y": 602.5,
+      "width": 190,
+      "height": 1,
+      "points": [
+        [
+          0,
+          0.0
+        ],
+        [
+          190,
+          0.0
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#43A047",
+      "strokeWidth": 2,
+      "roughness": 0
+    },
+    {
+      "id": "da9bc626",
+      "type": "text",
+      "x": 811.0,
+      "y": 595.5,
+      "width": 70,
+      "height": 14,
+      "text": "导入安全扫描",
+      "fontSize": 9,
+      "fontFamily": 5,
+      "strokeColor": "#43A047",
+      "textAlign": "left",
+      "roughness": 0
+    },
+    {
+      "id": "leg-t",
+      "type": "text",
+      "x": 560,
+      "y": 3140,
+      "width": 480,
+      "height": 30,
+      "text": "图例  Legend",
+      "fontSize": 20,
+      "fontFamily": 5,
+      "strokeColor": "#1a1a1a",
+      "textAlign": "center",
+      "roughness": 0
+    },
+    {
+      "id": "leg-s",
+      "type": "arrow",
+      "x": 500,
+      "y": 3188,
+      "width": 70,
+      "height": 1,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          70,
+          0
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#555",
+      "strokeWidth": 2.5,
+      "roughness": 0
+    },
+    {
+      "id": "leg-st",
+      "type": "text",
+      "x": 585,
+      "y": 3179,
+      "width": 180,
+      "height": 22,
+      "text": "实线 = 调用 / 依赖",
+      "fontSize": 14,
+      "fontFamily": 5,
+      "strokeColor": "#333",
+      "textAlign": "left",
+      "roughness": 0
+    },
+    {
+      "id": "leg-d",
+      "type": "arrow",
+      "x": 800,
+      "y": 3188,
+      "width": 70,
+      "height": 1,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          70,
+          0
+        ]
+      ],
+      "startBinding": null,
+      "endBinding": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "strokeColor": "#8E24AA",
+      "strokeWidth": 2.5,
+      "roughness": 0,
+      "strokeStyle": "dashed"
+    },
+    {
+      "id": "leg-dt",
+      "type": "text",
+      "x": 885,
+      "y": 3179,
+      "width": 220,
+      "height": 22,
+      "text": "虚线 = 实现 / 继承 / 聚合",
+      "fontSize": 14,
+      "fontFamily": 5,
+      "strokeColor": "#333",
+      "textAlign": "left",
+      "roughness": 0
+    }
+  ],
+  "appState": {
+    "viewBackgroundColor": "#fafafa",
+    "gridSize": 20
+  },
+  "files": {}
+}
