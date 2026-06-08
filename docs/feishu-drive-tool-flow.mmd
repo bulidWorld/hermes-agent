@@ -1,0 +1,91 @@
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "fontFamily": "Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
+    "background": "#ffffff",
+    "primaryTextColor": "#111827",
+    "lineColor": "#94a3b8",
+    "clusterBkg": "#ffffff",
+    "clusterBorder": "#e2e8f0",
+    "edgeLabelBackground": "#ffffff"
+  },
+  "flowchart": {
+    "curve": "basis",
+    "nodeSpacing": 46,
+    "rankSpacing": 56,
+    "padding": 18
+  }
+}}%%
+
+flowchart LR
+  TITLE["feishu_drive_tool.py 注册与调用逻辑<br/><span style='font-size:13px'>4 个 Feishu Drive 评论工具如何进入工具表，并在 Feishu 评论上下文里被 Agent 调用。</span>"]
+
+  subgraph REG["注册 / 暴露路径"]
+    direction TB
+    F_FILE["tools/feishu_drive_tool.py<br/>定义 schema、handler、_check_feishu、_do_request"]
+    F_REGISTER["4 次 registry.register<br/>list_comments / list_replies / reply_comment / add_comment"]
+    F_ENTRY["ToolRegistry.ToolEntry<br/>toolset=feishu_drive<br/>handler=_handle_*<br/>check_fn=_check_feishu"]
+    F_TOOLSET["toolsets.py<br/>feishu_drive toolset<br/>hermes-feishu 组合 toolset"]
+    F_DEFS["get_tool_definitions<br/>resolve_toolset 后调用 registry.get_definitions"]
+    F_CHECK["可用性检查<br/>_check_feishu: find_spec('lark_oapi')<br/>通过才暴露 schema 给模型"]
+  end
+
+  subgraph CALL["调用 / 执行路径"]
+    direction TB
+    C_EVENT["Feishu Drive 评论事件<br/>gateway.platforms.feishu_comment"]
+    C_CLIENT["注入 Lark client<br/>set_drive_client(client)<br/>存入 thread-local _local.client"]
+    C_AGENT["创建 AIAgent<br/>enabled_toolsets=['feishu_doc','feishu_drive']"]
+    C_LLM["模型选择工具<br/>feishu_drive_* tool_call + JSON args"]
+    C_DISPATCH["Agent 工具执行器<br/>顺序/并发执行，进入 _invoke_tool"]
+    C_HANDLE["model_tools.handle_function_call<br/>coerce args、pre hook、edit guard、registry.dispatch"]
+    C_HANDLER["feishu_drive handler<br/>get_client、校验 file_token / comment_id / content"]
+    C_REQUEST["_do_request<br/>构造 lark_oapi BaseRequest<br/>GET/POST Drive comments API"]
+    C_RESULT["tool_result / tool_error<br/>JSON 字符串追加为 tool message"]
+  end
+
+  subgraph API["Feishu API 端点"]
+    direction TB
+    A_LIST["GET /drive/v1/files/:file_token/comments<br/>feishu_drive_list_comments"]
+    A_REPLIES["GET /comments/:comment_id/replies<br/>feishu_drive_list_comment_replies"]
+    A_REPLY["POST /comments/:comment_id/replies<br/>feishu_drive_reply_comment"]
+    A_ADD["POST /files/:file_token/new_comments<br/>feishu_drive_add_comment"]
+  end
+
+  TITLE --> F_FILE
+
+  F_FILE --> F_REGISTER --> F_ENTRY --> F_TOOLSET --> F_DEFS --> F_CHECK
+  F_CHECK --> C_AGENT
+
+  C_EVENT --> C_CLIENT --> C_AGENT --> C_LLM --> C_DISPATCH --> C_HANDLE --> C_HANDLER --> C_REQUEST --> C_RESULT
+  C_RESULT --> C_LLM
+
+  C_HANDLE -. dispatch by name .-> F_ENTRY
+  C_HANDLER -. reads .-> C_CLIENT
+
+  C_REQUEST --> A_LIST
+  C_REQUEST --> A_REPLIES
+  C_REQUEST --> A_REPLY
+  C_REQUEST --> A_ADD
+
+  classDef title fill:#111827,stroke:#111827,color:#ffffff
+  classDef reg fill:#eff6ff,stroke:#2563eb,color:#172554
+  classDef expose fill:#ecfeff,stroke:#06b6d4,color:#083344
+  classDef runtime fill:#ecfdf5,stroke:#10b981,color:#052e1b
+  classDef dispatch fill:#f0fdf4,stroke:#22c55e,color:#052e16
+  classDef special fill:#f5f3ff,stroke:#8b5cf6,color:#24103f
+  classDef api fill:#fff7ed,stroke:#f97316,color:#431407
+
+  class TITLE title
+  class F_FILE,F_REGISTER,F_ENTRY reg
+  class F_TOOLSET,F_DEFS,F_CHECK expose
+  class C_EVENT,C_AGENT,C_LLM,C_DISPATCH,C_RESULT runtime
+  class C_HANDLE,C_HANDLER dispatch
+  class C_CLIENT special
+  class C_REQUEST,A_LIST,A_REPLIES,A_REPLY,A_ADD api
+
+  linkStyle 0 stroke:#111827,stroke-width:2.5px
+  linkStyle 1,2,3 stroke:#2563eb,stroke-width:3px
+  linkStyle 4,5 stroke:#06b6d4,stroke-width:3px
+  linkStyle 6,7,8,9,10,11,12,13,14,15 stroke:#16a34a,stroke-width:3px
+  linkStyle 16,17 stroke:#8b5cf6,stroke-width:2px,stroke-dasharray:5 4
+  linkStyle 18,19,20,21 stroke:#f97316,stroke-width:3px

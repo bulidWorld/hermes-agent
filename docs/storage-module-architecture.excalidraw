@@ -1,0 +1,111 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "elements": [
+    {"id":"title","type":"text","x":510,"y":18,"width":560,"height":38,"text":"Hermes 存储模块架构图","fontSize":30,"fontFamily":5,"strokeColor":"#1a1a1a","textAlign":"center","roughness":0},
+    {"id":"subtitle","type":"text","x":480,"y":62,"width":620,"height":24,"text":"按存储职责拆成独立泳道，主流向统一从左到右，避免跨线连接","fontSize":17,"fontFamily":5,"strokeColor":"#495057","textAlign":"center","roughness":0},
+
+    {"id":"header-entry","type":"rectangle","x":70,"y":110,"width":260,"height":52,"strokeColor":"#adb5bd","backgroundColor":"#f8f9fa","fillStyle":"solid","strokeWidth":1,"roughness":0,"roundness":{"type":3}},
+    {"id":"header-core","type":"rectangle","x":390,"y":110,"width":260,"height":52,"strokeColor":"#adb5bd","backgroundColor":"#fff9db","fillStyle":"solid","strokeWidth":1,"roughness":0,"roundness":{"type":3}},
+    {"id":"header-adapter","type":"rectangle","x":710,"y":110,"width":260,"height":52,"strokeColor":"#adb5bd","backgroundColor":"#ebfbee","fillStyle":"solid","strokeWidth":1,"roughness":0,"roundness":{"type":3}},
+    {"id":"header-disk","type":"rectangle","x":1030,"y":110,"width":430,"height":52,"strokeColor":"#adb5bd","backgroundColor":"#e7f5ff","fillStyle":"solid","strokeWidth":1,"roughness":0,"roundness":{"type":3}},
+    {"id":"txt-header-entry","type":"text","x":105,"y":124,"width":190,"height":24,"text":"入口 / 调用方","fontSize":18,"fontFamily":5,"strokeColor":"#495057","textAlign":"center","roughness":0},
+    {"id":"txt-header-core","type":"text","x":425,"y":124,"width":190,"height":24,"text":"核心协调层","fontSize":18,"fontFamily":5,"strokeColor":"#7c5c00","textAlign":"center","roughness":0},
+    {"id":"txt-header-adapter","type":"text","x":745,"y":124,"width":190,"height":24,"text":"存储适配层","fontSize":18,"fontFamily":5,"strokeColor":"#2b8a3e","textAlign":"center","roughness":0},
+    {"id":"txt-header-disk","type":"text","x":1135,"y":124,"width":220,"height":24,"text":"实际落盘介质","fontSize":18,"fontFamily":5,"strokeColor":"#1864ab","textAlign":"center","roughness":0},
+
+    {"id":"lane-session","type":"rectangle","x":55,"y":190,"width":1425,"height":150,"strokeColor":"#74c0fc","backgroundColor":"#e7f5ff","fillStyle":"solid","strokeWidth":2,"roughness":0,"opacity":45,"roundness":{"type":3}},
+    {"id":"lane-memory","type":"rectangle","x":55,"y":375,"width":1425,"height":135,"strokeColor":"#69db7c","backgroundColor":"#ebfbee","fillStyle":"solid","strokeWidth":2,"roughness":0,"opacity":45,"roundness":{"type":3}},
+    {"id":"lane-checkpoint","type":"rectangle","x":55,"y":545,"width":1425,"height":135,"strokeColor":"#ffd43b","backgroundColor":"#fff9db","fillStyle":"solid","strokeWidth":2,"roughness":0,"opacity":45,"roundness":{"type":3}},
+    {"id":"lane-api","type":"rectangle","x":55,"y":715,"width":1425,"height":135,"strokeColor":"#b197fc","backgroundColor":"#f3f0ff","fillStyle":"solid","strokeWidth":2,"roughness":0,"opacity":45,"roundness":{"type":3}},
+    {"id":"lane-ops","type":"rectangle","x":55,"y":885,"width":1425,"height":230,"strokeColor":"#ffa94d","backgroundColor":"#fff4e6","fillStyle":"solid","strokeWidth":2,"roughness":0,"opacity":45,"roundness":{"type":3}},
+
+    {"id":"lbl-session","type":"text","x":72,"y":204,"width":160,"height":24,"text":"主会话存储","fontSize":18,"fontFamily":5,"strokeColor":"#1864ab","textAlign":"left","roughness":0},
+    {"id":"lbl-memory","type":"text","x":72,"y":389,"width":160,"height":24,"text":"长期记忆","fontSize":18,"fontFamily":5,"strokeColor":"#2b8a3e","textAlign":"left","roughness":0},
+    {"id":"lbl-checkpoint","type":"text","x":72,"y":559,"width":160,"height":24,"text":"文件回滚","fontSize":18,"fontFamily":5,"strokeColor":"#7c5c00","textAlign":"left","roughness":0},
+    {"id":"lbl-api","type":"text","x":72,"y":729,"width":180,"height":24,"text":"API 响应状态","fontSize":18,"fontFamily":5,"strokeColor":"#6741d9","textAlign":"left","roughness":0},
+    {"id":"lbl-ops","type":"text","x":72,"y":899,"width":180,"height":24,"text":"任务 / 平台存储","fontSize":18,"fontFamily":5,"strokeColor":"#e67700","textAlign":"left","roughness":0},
+
+    {"id":"session-entry","type":"rectangle","x":95,"y":242,"width":200,"height":66,"strokeColor":"#1864ab","backgroundColor":"#ffffff","fillStyle":"solid","strokeWidth":2,"roughness":0,"roundness":{"type":3}},
+    {"id":"txt-session-entry","type":"text","x":115,"y":254,"width":160,"height":42,"text":"CLI / TUI / Gateway\nACP / Cron","fontSize":15,"fontFamily":5,"strokeColor":"#212529","textAlign":"center","roughness":0},
+    {"id":"session-core","type":"rectangle","x":410,"y":242,"width":220,"height":66,"strokeColor":"#1864ab","backgroundColor":"#ffffff","fillStyle":"solid","strokeWidth":2,"roughness":0,"roundness":{"type":3}},
+    {"id":"txt-session-core","type":"text","x":430,"y":254,"width":180,"height":42,"text":"AIAgent / SessionStore\n会话身份与上下文","fontSize":15,"fontFamily":5,"strokeColor":"#212529","textAlign":"center","roughness":0},
+    {"id":"session-adapter","type":"rectangle","x":730,"y":242,"width":220,"height":66,"strokeColor":"#1864ab","backgroundColor":"#ffffff","fillStyle":"solid","strokeWidth":2,"roughness":0,"roundness":{"type":3}},
+    {"id":"txt-session-adapter","type":"text","x":750,"y":254,"width":180,"height":42,"text":"SessionDB\nhermes_state.py","fontSize":15,"fontFamily":5,"strokeColor":"#212529","textAlign":"center","roughness":0},
+    {"id":"session-disk","type":"rectangle","x":1060,"y":225,"width":350,"height":100,"strokeColor":"#1864ab","backgroundColor":"#ffffff","fillStyle":"solid","strokeWidth":2,"roughness":0,"roundness":{"type":3}},
+    {"id":"txt-session-disk","type":"text","x":1086,"y":239,"width":298,"height":72,"text":"~/.hermes/state.db\nsessions / messages / state_meta\ncompression_locks / billing / lineage\nFTS5 + trigram 搜索索引","fontSize":15,"fontFamily":5,"strokeColor":"#212529","textAlign":"center","roughness":0},
+
+    {"id":"memory-entry","type":"rectangle","x":95,"y":425,"width":200,"height":56,"strokeColor":"#2b8a3e","backgroundColor":"#ffffff","fillStyle":"solid","strokeWidth":2,"roughness":0,"roundness":{"type":3}},
+    {"id":"txt-memory-entry","type":"text","x":115,"y":436,"width":160,"height":34,"text":"conversation_loop\n每轮 prefetch/sync","fontSize":15,"fontFamily":5,"strokeColor":"#212529","textAlign":"center","roughness":0},
+    {"id":"memory-core","type":"rectangle","x":410,"y":425,"width":220,"height":56,"strokeColor":"#2b8a3e","backgroundColor":"#ffffff","fillStyle":"solid","strokeWidth":2,"roughness":0,"roundness":{"type":3}},
+    {"id":"txt-memory-core","type":"text","x":430,"y":436,"width":180,"height":34,"text":"MemoryManager\n统一编排","fontSize":15,"fontFamily":5,"strokeColor":"#212529","textAlign":"center","roughness":0},
+    {"id":"memory-adapter","type":"rectangle","x":730,"y":425,"width":220,"height":56,"strokeColor":"#2b8a3e","backgroundColor":"#ffffff","fillStyle":"solid","strokeWidth":2,"roughness":0,"roundness":{"type":3}},
+    {"id":"txt-memory-adapter","type":"text","x":750,"y":436,"width":180,"height":34,"text":"MemoryProvider\n内置 + 一个外部插件","fontSize":15,"fontFamily":5,"strokeColor":"#212529","textAlign":"center","roughness":0},
+    {"id":"memory-disk","type":"rectangle","x":1060,"y":425,"width":350,"height":56,"strokeColor":"#2b8a3e","backgroundColor":"#ffffff","fillStyle":"solid","strokeWidth":2,"roughness":0,"roundness":{"type":3}},
+    {"id":"txt-memory-disk","type":"text","x":1086,"y":436,"width":298,"height":34,"text":"plugins/memory/* 后端\nHoncho / Mem0 / Hindsight / 本地文件","fontSize":15,"fontFamily":5,"strokeColor":"#212529","textAlign":"center","roughness":0},
+
+    {"id":"checkpoint-entry","type":"rectangle","x":95,"y":595,"width":200,"height":56,"strokeColor":"#7c5c00","backgroundColor":"#ffffff","fillStyle":"solid","strokeWidth":2,"roughness":0,"roundness":{"type":3}},
+    {"id":"txt-checkpoint-entry","type":"text","x":115,"y":606,"width":160,"height":34,"text":"write_file / patch\nterminal 变更前","fontSize":15,"fontFamily":5,"strokeColor":"#212529","textAlign":"center","roughness":0},
+    {"id":"checkpoint-core","type":"rectangle","x":410,"y":595,"width":220,"height":56,"strokeColor":"#7c5c00","backgroundColor":"#ffffff","fillStyle":"solid","strokeWidth":2,"roughness":0,"roundness":{"type":3}},
+    {"id":"txt-checkpoint-core","type":"text","x":430,"y":606,"width":180,"height":34,"text":"tool_executor\n每轮去重触发","fontSize":15,"fontFamily":5,"strokeColor":"#212529","textAlign":"center","roughness":0},
+    {"id":"checkpoint-adapter","type":"rectangle","x":730,"y":595,"width":220,"height":56,"strokeColor":"#7c5c00","backgroundColor":"#ffffff","fillStyle":"solid","strokeWidth":2,"roughness":0,"roundness":{"type":3}},
+    {"id":"txt-checkpoint-adapter","type":"text","x":750,"y":606,"width":180,"height":34,"text":"CheckpointManager\nshadow git 管理","fontSize":15,"fontFamily":5,"strokeColor":"#212529","textAlign":"center","roughness":0},
+    {"id":"checkpoint-disk","type":"rectangle","x":1060,"y":595,"width":350,"height":56,"strokeColor":"#7c5c00","backgroundColor":"#ffffff","fillStyle":"solid","strokeWidth":2,"roughness":0,"roundness":{"type":3}},
+    {"id":"txt-checkpoint-disk","type":"text","x":1086,"y":606,"width":298,"height":34,"text":"~/.hermes/checkpoints/store\nrefs / indexes / projects / git objects","fontSize":15,"fontFamily":5,"strokeColor":"#212529","textAlign":"center","roughness":0},
+
+    {"id":"api-entry","type":"rectangle","x":95,"y":765,"width":200,"height":56,"strokeColor":"#6741d9","backgroundColor":"#ffffff","fillStyle":"solid","strokeWidth":2,"roughness":0,"roundness":{"type":3}},
+    {"id":"txt-api-entry","type":"text","x":115,"y":776,"width":160,"height":34,"text":"OpenAI-compatible\nAPI Server","fontSize":15,"fontFamily":5,"strokeColor":"#212529","textAlign":"center","roughness":0},
+    {"id":"api-core","type":"rectangle","x":410,"y":765,"width":220,"height":56,"strokeColor":"#6741d9","backgroundColor":"#ffffff","fillStyle":"solid","strokeWidth":2,"roughness":0,"roundness":{"type":3}},
+    {"id":"txt-api-core","type":"text","x":430,"y":776,"width":180,"height":34,"text":"previous_response_id\n会话续接状态","fontSize":15,"fontFamily":5,"strokeColor":"#212529","textAlign":"center","roughness":0},
+    {"id":"api-adapter","type":"rectangle","x":730,"y":765,"width":220,"height":56,"strokeColor":"#6741d9","backgroundColor":"#ffffff","fillStyle":"solid","strokeWidth":2,"roughness":0,"roundness":{"type":3}},
+    {"id":"txt-api-adapter","type":"text","x":750,"y":776,"width":180,"height":34,"text":"ResponseStore\nSQLite LRU","fontSize":15,"fontFamily":5,"strokeColor":"#212529","textAlign":"center","roughness":0},
+    {"id":"api-disk","type":"rectangle","x":1060,"y":765,"width":350,"height":56,"strokeColor":"#6741d9","backgroundColor":"#ffffff","fillStyle":"solid","strokeWidth":2,"roughness":0,"roundness":{"type":3}},
+    {"id":"txt-api-disk","type":"text","x":1086,"y":776,"width":298,"height":34,"text":"~/.hermes/response_store.db\nresponses / conversations","fontSize":15,"fontFamily":5,"strokeColor":"#212529","textAlign":"center","roughness":0},
+
+    {"id":"ops-cron-entry","type":"rectangle","x":95,"y":945,"width":200,"height":50,"strokeColor":"#e67700","backgroundColor":"#ffffff","fillStyle":"solid","strokeWidth":2,"roughness":0,"roundness":{"type":3}},
+    {"id":"txt-ops-cron-entry","type":"text","x":115,"y":956,"width":160,"height":28,"text":"Cron scheduler","fontSize":15,"fontFamily":5,"strokeColor":"#212529","textAlign":"center","roughness":0},
+    {"id":"ops-cron-core","type":"rectangle","x":410,"y":945,"width":220,"height":50,"strokeColor":"#e67700","backgroundColor":"#ffffff","fillStyle":"solid","strokeWidth":2,"roughness":0,"roundness":{"type":3}},
+    {"id":"txt-ops-cron-core","type":"text","x":430,"y":956,"width":180,"height":28,"text":"cron/jobs.py\n原子保存 + 文件锁","fontSize":15,"fontFamily":5,"strokeColor":"#212529","textAlign":"center","roughness":0},
+    {"id":"ops-cron-disk","type":"rectangle","x":730,"y":945,"width":350,"height":50,"strokeColor":"#e67700","backgroundColor":"#ffffff","fillStyle":"solid","strokeWidth":2,"roughness":0,"roundness":{"type":3}},
+    {"id":"txt-ops-cron-disk","type":"text","x":755,"y":956,"width":300,"height":28,"text":"~/.hermes/cron/jobs.json + output/","fontSize":15,"fontFamily":5,"strokeColor":"#212529","textAlign":"center","roughness":0},
+
+    {"id":"ops-kanban-entry","type":"rectangle","x":95,"y":1025,"width":200,"height":50,"strokeColor":"#e67700","backgroundColor":"#ffffff","fillStyle":"solid","strokeWidth":2,"roughness":0,"roundness":{"type":3}},
+    {"id":"txt-ops-kanban-entry","type":"text","x":115,"y":1036,"width":160,"height":28,"text":"Kanban commands","fontSize":15,"fontFamily":5,"strokeColor":"#212529","textAlign":"center","roughness":0},
+    {"id":"ops-kanban-core","type":"rectangle","x":410,"y":1025,"width":220,"height":50,"strokeColor":"#e67700","backgroundColor":"#ffffff","fillStyle":"solid","strokeWidth":2,"roughness":0,"roundness":{"type":3}},
+    {"id":"txt-ops-kanban-core","type":"text","x":430,"y":1036,"width":180,"height":28,"text":"hermes_cli/kanban_db.py","fontSize":15,"fontFamily":5,"strokeColor":"#212529","textAlign":"center","roughness":0},
+    {"id":"ops-kanban-disk","type":"rectangle","x":730,"y":1025,"width":350,"height":50,"strokeColor":"#e67700","backgroundColor":"#ffffff","fillStyle":"solid","strokeWidth":2,"roughness":0,"roundness":{"type":3}},
+    {"id":"txt-ops-kanban-disk","type":"text","x":755,"y":1036,"width":300,"height":28,"text":"kanban.db: tasks / runs / events","fontSize":15,"fontFamily":5,"strokeColor":"#212529","textAlign":"center","roughness":0},
+
+    {"id":"ops-platform-entry","type":"rectangle","x":1130,"y":945,"width":270,"height":130,"strokeColor":"#e67700","backgroundColor":"#ffffff","fillStyle":"solid","strokeWidth":2,"roughness":0,"roundness":{"type":3}},
+    {"id":"txt-ops-platform-entry","type":"text","x":1158,"y":965,"width":214,"height":86,"text":"平台 / 插件私有状态\npairing\nfile_storage\nmatrix crypto\nprocess checkpoint","fontSize":15,"fontFamily":5,"strokeColor":"#212529","textAlign":"center","roughness":0},
+
+    {"id":"note","type":"text","x":135,"y":1148,"width":1240,"height":48,"text":"布局原则：主会话链路只横向连接一次；专用存储各自成行；平台私有状态作为独立存储岛，不再反向连接到主链路。","fontSize":17,"fontFamily":5,"strokeColor":"#495057","textAlign":"center","roughness":0},
+
+    {"id":"a-session-1","type":"arrow","x":295,"y":275,"width":115,"height":0,"strokeColor":"#1864ab","backgroundColor":"transparent","strokeWidth":2,"roughness":0,"points":[[0,0],[115,0]],"startArrowhead":null,"endArrowhead":"arrow"},
+    {"id":"a-session-2","type":"arrow","x":630,"y":275,"width":100,"height":0,"strokeColor":"#1864ab","backgroundColor":"transparent","strokeWidth":2,"roughness":0,"points":[[0,0],[100,0]],"startArrowhead":null,"endArrowhead":"arrow"},
+    {"id":"a-session-3","type":"arrow","x":950,"y":275,"width":110,"height":0,"strokeColor":"#1864ab","backgroundColor":"transparent","strokeWidth":2,"roughness":0,"points":[[0,0],[110,0]],"startArrowhead":null,"endArrowhead":"arrow"},
+
+    {"id":"a-memory-1","type":"arrow","x":295,"y":453,"width":115,"height":0,"strokeColor":"#2b8a3e","backgroundColor":"transparent","strokeWidth":2,"roughness":0,"points":[[0,0],[115,0]],"startArrowhead":null,"endArrowhead":"arrow"},
+    {"id":"a-memory-2","type":"arrow","x":630,"y":453,"width":100,"height":0,"strokeColor":"#2b8a3e","backgroundColor":"transparent","strokeWidth":2,"roughness":0,"points":[[0,0],[100,0]],"startArrowhead":null,"endArrowhead":"arrow"},
+    {"id":"a-memory-3","type":"arrow","x":950,"y":453,"width":110,"height":0,"strokeColor":"#2b8a3e","backgroundColor":"transparent","strokeWidth":2,"roughness":0,"points":[[0,0],[110,0]],"startArrowhead":null,"endArrowhead":"arrow"},
+
+    {"id":"a-checkpoint-1","type":"arrow","x":295,"y":623,"width":115,"height":0,"strokeColor":"#7c5c00","backgroundColor":"transparent","strokeWidth":2,"roughness":0,"points":[[0,0],[115,0]],"startArrowhead":null,"endArrowhead":"arrow"},
+    {"id":"a-checkpoint-2","type":"arrow","x":630,"y":623,"width":100,"height":0,"strokeColor":"#7c5c00","backgroundColor":"transparent","strokeWidth":2,"roughness":0,"points":[[0,0],[100,0]],"startArrowhead":null,"endArrowhead":"arrow"},
+    {"id":"a-checkpoint-3","type":"arrow","x":950,"y":623,"width":110,"height":0,"strokeColor":"#7c5c00","backgroundColor":"transparent","strokeWidth":2,"roughness":0,"points":[[0,0],[110,0]],"startArrowhead":null,"endArrowhead":"arrow"},
+
+    {"id":"a-api-1","type":"arrow","x":295,"y":793,"width":115,"height":0,"strokeColor":"#6741d9","backgroundColor":"transparent","strokeWidth":2,"roughness":0,"points":[[0,0],[115,0]],"startArrowhead":null,"endArrowhead":"arrow"},
+    {"id":"a-api-2","type":"arrow","x":630,"y":793,"width":100,"height":0,"strokeColor":"#6741d9","backgroundColor":"transparent","strokeWidth":2,"roughness":0,"points":[[0,0],[100,0]],"startArrowhead":null,"endArrowhead":"arrow"},
+    {"id":"a-api-3","type":"arrow","x":950,"y":793,"width":110,"height":0,"strokeColor":"#6741d9","backgroundColor":"transparent","strokeWidth":2,"roughness":0,"points":[[0,0],[110,0]],"startArrowhead":null,"endArrowhead":"arrow"},
+
+    {"id":"a-cron-1","type":"arrow","x":295,"y":970,"width":115,"height":0,"strokeColor":"#e67700","backgroundColor":"transparent","strokeWidth":2,"roughness":0,"points":[[0,0],[115,0]],"startArrowhead":null,"endArrowhead":"arrow"},
+    {"id":"a-cron-2","type":"arrow","x":630,"y":970,"width":100,"height":0,"strokeColor":"#e67700","backgroundColor":"transparent","strokeWidth":2,"roughness":0,"points":[[0,0],[100,0]],"startArrowhead":null,"endArrowhead":"arrow"},
+    {"id":"a-kanban-1","type":"arrow","x":295,"y":1050,"width":115,"height":0,"strokeColor":"#e67700","backgroundColor":"transparent","strokeWidth":2,"roughness":0,"points":[[0,0],[115,0]],"startArrowhead":null,"endArrowhead":"arrow"},
+    {"id":"a-kanban-2","type":"arrow","x":630,"y":1050,"width":100,"height":0,"strokeColor":"#e67700","backgroundColor":"transparent","strokeWidth":2,"roughness":0,"points":[[0,0],[100,0]],"startArrowhead":null,"endArrowhead":"arrow"}
+  ],
+  "appState": {
+    "viewBackgroundColor": "#ffffff",
+    "gridSize": 20
+  },
+  "files": {}
+}
