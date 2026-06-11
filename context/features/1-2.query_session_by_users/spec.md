@@ -12,7 +12,7 @@
 
 ### 1. 查询会话列表
 
-**`GET /v1/sessions?user_id={user_id}`**
+**`GET /custom/v1/sessions?user_id={user_id}`**
 
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
@@ -48,13 +48,75 @@
 
 ### 2. 查询会话消息
 
-**`GET /v1/sessions/{session_id}/messages`**
+**`GET /custom/v1/sessions/{session_id}/messages`**
 
 行为:
 - 始终沿 parent_session_id 链从根节点走到当前节点，合并所有祖先消息，确保压缩链会话也能获取完整上下文
+- 若消息对应的工具调用生成了文件 artifact，则同步返回该工具调用绑定的附件信息
 - 会话不存在时返回 404
 - 需要 API key 认证
 - 返回 `{"object": "session.messages", "session_id": "...", "data": [{role, content}, ...]}`
+
+消息对象遵循 OpenAI conversation 结构，并保留 Hermes 扩展字段：
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `role` | string | 消息角色：`user`、`assistant`、`tool`、`system` |
+| `content` | string \| object | 消息内容 |
+| `tool_call_id` | string \| null | tool 消息对应的工具调用 ID |
+| `tool_name` | string \| null | 工具名称 |
+| `tool_calls` | array \| null | assistant 发起的工具调用列表 |
+| `artifacts` | array \| null | 该 tool message 绑定的生成文件附件；无附件时不返回该字段 |
+
+`artifacts` 元素结构：
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `id` | string | artifact ID，同文件服务器 `publicId` |
+| `artifact_id` | string | artifact ID，同文件服务器 `publicId` |
+| `run_id` | string | 生成该附件的 run ID |
+| `session_id` | string | 生成该附件的 session ID |
+| `tool_call_id` | string | 生成该附件的工具调用 ID |
+| `tool_name` | string | 生成该附件的工具名称 |
+| `file_id` | string | 文件服务器 `publicId` |
+| `filename` | string | 文件名 |
+| `mime_type` | string | MIME 类型 |
+| `size` | int | 文件大小，单位 byte |
+| `created_at` | number | artifact 创建时间（Unix 时间戳） |
+
+示例：
+
+```json
+{
+  "object": "session.messages",
+  "session_id": "session_123",
+  "data": [
+    {
+      "role": "tool",
+      "tool_call_id": "call_xyz",
+      "tool_name": "write_file",
+      "content": "{\"bytes_written\": 1024}",
+      "artifacts": [
+        {
+          "id": "file_public_id",
+          "artifact_id": "file_public_id",
+          "run_id": "run_abc",
+          "session_id": "session_123",
+          "tool_call_id": "call_xyz",
+          "tool_name": "write_file",
+          "file_id": "file_public_id",
+          "filename": "report.docx",
+          "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "size": 12345,
+          "created_at": 1781059200.0
+        }
+      ]
+    }
+  ]
+}
+```
+
+附件下载不经过 Hermes API server 代理，三方系统使用 `file_id` 或 `artifact_id` 直接对接文件服务器。
 
 ## 认证策略
 两个接口均遵循与 X-Hermes-Session-Id header 相同的安全策略：配置了 API key 时强制 Bearer token 验证，未配置 key 时允许本地无认证访问。

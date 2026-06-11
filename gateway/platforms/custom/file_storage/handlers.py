@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import logging
 from typing import Any, Callable, Dict, List, Optional
+from urllib.parse import unquote
 
 try:
     from aiohttp import web
@@ -121,7 +122,7 @@ class FileStorageHandlers:
             if field_name != "file":
                 continue
 
-            filename = (part.filename or "unnamed").strip()
+            filename = unquote((part.filename or "unnamed").strip())
             if not filename:
                 continue
 

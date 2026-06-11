@@ -67,6 +67,7 @@ class ExtensionAggregator:
         :class:`SessionExtension` is always available.
         """
         extensions: List[Any] = []
+        artifact_lookup = None
 
         # File-storage extension — only when file-storage service is configured
         from .file_storage import create_file_storage_components, FileStorageExtension  # noqa: E402
@@ -76,10 +77,23 @@ class ExtensionAggregator:
         )
         if storage_components is not None:
             extensions.append(FileStorageExtension(storage_components))
+            from .artifacts import RunArtifactsExtension  # noqa: E402
+
+            artifacts_extension = RunArtifactsExtension(
+                auth_checker=auth_checker,
+                client=storage_components.client,
+            )
+            extensions.append(artifacts_extension)
+            artifact_lookup = artifacts_extension.list_tool_call_artifacts
+            logger.info("Run-artifacts extension enabled")
         else:
             logger.debug(
                 "File-storage extension: disabled "
                 "(no file_storage_service_url configured)"
+            )
+            logger.debug(
+                "Run-artifacts extension: disabled "
+                "(requires file_storage_service_url)"
             )
 
         # Session extension — always available
@@ -87,6 +101,7 @@ class ExtensionAggregator:
             CustomSessionHandlers(
                 auth_checker=auth_checker,
                 session_db_provider=session_db_provider,
+                artifact_lookup=artifact_lookup,
             )
         ))
 
@@ -123,6 +138,50 @@ class ExtensionAggregator:
     # ------------------------------------------------------------------
     # Extension-specific methods — delegate to the owning extension
     # ------------------------------------------------------------------
+
+    async def collect_run_artifacts(
+        self,
+        run_id: str,
+        session_id: str,
+        result: Dict[str, Any],
+        request_headers: Dict[str, str] | None = None,
+    ) -> List[Dict[str, Any]]:
+        """Upload and persist artifacts produced by a completed API run."""
+        artifacts: List[Dict[str, Any]] = []
+        handled = 0
+        for ext in self._extensions:
+            if hasattr(ext, "collect_run_artifacts"):
+                handled += 1
+                try:
+                    artifacts.extend(await ext.collect_run_artifacts(
+                        run_id, session_id, result,
+                        request_headers=request_headers,
+                    ))
+                except Exception as exc:
+                    logger.warning(
+                        "collect_run_artifacts failed for %s: %s",
+                        type(ext).__name__, exc,
+                    )
+        if handled == 0:
+            logger.info(
+                "collect_run_artifacts skipped for run=%s session=%s: no extension registered",
+                run_id, session_id,
+            )
+        return artifacts
+
+    def list_run_artifacts(self, run_id: str) -> List[Dict[str, Any]]:
+        """Return persisted artifacts for a run, if any extension owns them."""
+        artifacts: List[Dict[str, Any]] = []
+        for ext in self._extensions:
+            if hasattr(ext, "list_run_artifacts"):
+                try:
+                    artifacts.extend(ext.list_run_artifacts(run_id))
+                except Exception as exc:
+                    logger.warning(
+                        "list_run_artifacts failed for %s: %s",
+                        type(ext).__name__, exc,
+                    )
+        return artifacts
 
     async def inject_attachments(
         self,

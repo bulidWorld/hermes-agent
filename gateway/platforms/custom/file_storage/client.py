@@ -125,6 +125,7 @@ class FileStorageServiceClient:
         mime_type: str,
         data: bytes,
         request=None,
+        folder_path: Optional[str] = None,
     ) -> FileUploadResult:
         """Upload a file via ``POST /api/v1/files`` (multipart/form-data)."""
         session = await self._ensure_session()
@@ -133,7 +134,7 @@ class FileStorageServiceClient:
         form = aiohttp.FormData()
         form.add_field("file", data, filename=filename, content_type=mime_type)
         form.add_field("workspaceName", self._workspace_name)
-        form.add_field("folderPath", self._folder_path)
+        form.add_field("folderPath", folder_path or self._folder_path)
 
         headers = await self._auth_headers(request)
 

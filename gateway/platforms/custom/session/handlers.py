@@ -8,7 +8,7 @@ classes with explicit dependencies injected via constructors.
 from __future__ import annotations
 
 import logging
-from typing import Any, Callable, Optional
+from typing import Any, Callable, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -43,9 +43,11 @@ class CustomSessionHandlers:
         self,
         auth_checker: _AuthChecker,
         session_db_provider: Callable[[], Any],
+        artifact_lookup: Optional[Callable[[List[str]], List[Dict[str, Any]]]] = None,
     ) -> None:
         self._check_auth = auth_checker
         self._session_db_provider = session_db_provider
+        self._artifact_lookup = artifact_lookup
 
     # ------------------------------------------------------------------
     # Route registration
@@ -177,6 +179,7 @@ class CustomSessionHandlers:
             messages = db.get_messages_as_conversation(
                 session_id, include_ancestors=True,
             )
+            messages = self._attach_artifacts(messages)
         except Exception as e:
             logger.error(
                 "Error retrieving messages for session %s: %s", session_id, e,
@@ -193,3 +196,49 @@ class CustomSessionHandlers:
             "session_id": session_id,
             "data": messages,
         })
+
+    def _attach_artifacts(
+        self, messages: List[Dict[str, Any]],
+    ) -> List[Dict[str, Any]]:
+        if not self._artifact_lookup:
+            return messages
+
+        tool_call_ids = [
+            str(msg.get("tool_call_id") or "")
+            for msg in messages
+            if isinstance(msg, dict) and msg.get("tool_call_id")
+        ]
+        if not tool_call_ids:
+            return messages
+
+        try:
+            artifacts = self._artifact_lookup(tool_call_ids)
+        except Exception as exc:
+            logger.warning("Error retrieving artifacts for session messages: %s", exc)
+            return messages
+
+        by_tool_call: Dict[str, List[Dict[str, Any]]] = {}
+        for artifact in artifacts or []:
+            if not isinstance(artifact, dict):
+                continue
+            tool_call_id = str(artifact.get("tool_call_id") or "")
+            if tool_call_id:
+                by_tool_call.setdefault(tool_call_id, []).append(artifact)
+
+        if not by_tool_call:
+            return messages
+
+        enriched: List[Dict[str, Any]] = []
+        for msg in messages:
+            if not isinstance(msg, dict):
+                enriched.append(msg)
+                continue
+            tool_call_id = str(msg.get("tool_call_id") or "")
+            artifacts_for_msg = by_tool_call.get(tool_call_id)
+            if artifacts_for_msg:
+                item = dict(msg)
+                item["artifacts"] = artifacts_for_msg
+                enriched.append(item)
+            else:
+                enriched.append(msg)
+        return enriched

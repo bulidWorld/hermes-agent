@@ -3721,6 +3721,7 @@ class APIServerAdapter(BasePlatformAdapter):
         auth_err = self._check_auth(request)
         if auth_err:
             return auth_err
+        request_headers = dict(request.headers)
 
         # Long-term memory scope header (see chat_completions for details).
         gateway_session_key, key_err = self._parse_session_key_header(request)
@@ -3970,6 +3971,13 @@ class APIServerAdapter(BasePlatformAdapter):
                 else:
                     final_response = result.get("final_response", "") if isinstance(result, dict) else ""
                     _eff_sid = getattr(agent, "session_id", session_id)
+                    artifact_session_id = _eff_sid if isinstance(_eff_sid, str) and _eff_sid else session_id
+                    artifacts = await self._custom_extension.collect_run_artifacts(
+                        run_id,
+                        artifact_session_id,
+                        result if isinstance(result, dict) else {},
+                        request_headers=request_headers,
+                    )
                     q.put_nowait({
                         "event": "run.completed",
                         "run_id": run_id,
@@ -3977,12 +3985,14 @@ class APIServerAdapter(BasePlatformAdapter):
                         "output": final_response,
                         "usage": usage,
                         "session_id": _eff_sid if isinstance(_eff_sid, str) and _eff_sid else session_id,
+                        "artifacts": artifacts,
                     })
                     self._set_run_status(
                         run_id,
                         "completed",
                         output=final_response,
                         usage=usage,
+                        artifacts=artifacts,
                         last_event="run.completed",
                     )
             except asyncio.CancelledError:
@@ -4065,6 +4075,14 @@ class APIServerAdapter(BasePlatformAdapter):
         run_id = request.match_info["run_id"]
         status = self._run_statuses.get(run_id)
         if status is None:
+            artifacts = self._custom_extension.list_run_artifacts(run_id)
+            if artifacts:
+                return web.json_response({
+                    "object": "hermes.run",
+                    "run_id": run_id,
+                    "status": "unknown",
+                    "artifacts": artifacts,
+                })
             return web.json_response(
                 _openai_error(f"Run not found: {run_id}", code="run_not_found"),
                 status=404,
